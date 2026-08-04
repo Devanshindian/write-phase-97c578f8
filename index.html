@@ -1,0 +1,2200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Write Phase: how research becomes a finished article</title>
+<style>
+  :root{
+    --ink:#1c1a17; --muted:#6b6459; --line:#efe7d8;
+    --paper:#ffffff; --cream:#fffdf8; --wash:#fff8ec;
+    --yellow:#ffb703; --yellow-soft:#ffe9ad; --orange:#fb7a00; --orange-soft:#ffd9b0;
+    --green:#e8f5ec; --green-line:#cfe8d5; --green-ink:#2e7d43;
+    --red:#fdf3f0; --red-line:#f6d9cf; --red-ink:#c2603a;
+    --blue:#eef4fb; --blue-line:#d3e2f2; --blue-ink:#2f6fb0;
+    --shadow:0 1px 2px rgba(28,26,23,.04), 0 8px 24px rgba(28,26,23,.05);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.62; font-size:16.5px; -webkit-font-smoothing:antialiased;}
+  a{color:var(--orange);}
+  .wrap{max-width:1000px; margin:0 auto; padding:0 24px;}
+
+  header{background:linear-gradient(180deg,var(--wash),var(--paper)); border-bottom:1px solid var(--line); padding:64px 0 44px;}
+  .kicker{display:inline-block; font-size:12.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--orange); background:var(--paper); border:1px solid var(--orange-soft); padding:5px 12px; border-radius:100px; margin-bottom:20px;}
+  h1{font-size:clamp(30px,5vw,46px); line-height:1.1; margin:0 0 14px; letter-spacing:-.02em;}
+  h1 .hl{background:linear-gradient(180deg,transparent 62%,var(--yellow-soft) 62%); padding:0 2px;}
+  .lede{font-size:19px; color:var(--muted); max-width:760px; margin:0;}
+
+  nav{position:sticky; top:0; z-index:10; background:rgba(255,255,255,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  nav .wrap{display:flex; gap:4px; flex-wrap:wrap; padding-top:11px; padding-bottom:11px;}
+  nav a{font-size:13px; font-weight:600; color:var(--muted); text-decoration:none; padding:6px 11px; border-radius:100px;}
+  nav a:hover{color:var(--ink); background:var(--wash);}
+
+  section{padding:56px 0; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2{font-size:28px; letter-spacing:-.01em; margin:0 0 6px;}
+  h2 .num{color:var(--orange); font-variant-numeric:tabular-nums; margin-right:10px;}
+  .sub{color:var(--muted); margin:0 0 26px; font-size:17px; max-width:760px;}
+  h3{font-size:18px; margin:24px 0 8px;}
+  h4{font-size:15.5px; margin:20px 0 6px;}
+  p{margin:0 0 14px;}
+  .muted{color:var(--muted);}
+  b{color:var(--ink);}
+  ul,ol{margin:0 0 14px; padding-left:20px;} li{margin:3px 0;}
+  td ul, td ol{margin:6px 0 0;} .mem ul{margin:6px 0 6px;}
+
+  .note{background:var(--cream); border:1px solid var(--line); border-left:4px solid var(--yellow); border-radius:12px; padding:16px 18px; margin:20px 0; font-size:15.5px;}
+  .note.orange{border-left-color:var(--orange); background:var(--wash);}
+  .note.red{border-left-color:var(--red-ink); background:var(--red);}
+  .note.green{border-left-color:var(--green-ink); background:var(--green);}
+  .tag{font-size:11.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--orange);}
+  .tag.r{color:var(--red-ink);} .tag.g{color:var(--green-ink);}
+
+  /* step flow */
+  .flow{display:flex; flex-direction:column; gap:0; margin-top:10px;}
+  .step{display:flex; gap:18px; align-items:flex-start; position:relative; padding:14px 0;}
+  .step:not(:last-child)::after{content:""; position:absolute; left:23px; top:52px; bottom:-14px; width:2px; background:linear-gradient(var(--yellow),var(--orange-soft));}
+  .dot{flex:none; width:48px; height:48px; border-radius:14px; display:grid; place-items:center; font-weight:800; font-size:16px; color:var(--ink); background:var(--yellow-soft); border:2px solid var(--yellow); box-shadow:var(--shadow); text-align:center; line-height:1;}
+  .step-body{min-width:0;}
+  .step-body h3{margin:4px 0 4px;}
+  .step-body p{margin:0 0 6px; color:var(--muted); font-size:15.5px;}
+  .step-body ul{margin:6px 0 4px; color:var(--muted); font-size:14.5px;} .step-body ul .file{font-size:11.5px;}
+  .step-body ul .fn{color:var(--ink); font-weight:600;}
+  .xref{font-size:12.5px; font-weight:600; color:var(--orange); background:var(--wash); border:1px solid var(--orange-soft); border-radius:100px; padding:1px 9px; text-decoration:none;}
+  .xref:hover{background:var(--orange-soft);}
+  .phase{font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--orange); margin:26px 0 2px;}
+  .pill{display:inline-block; font-size:12px; font-weight:600; color:var(--orange); background:var(--wash); border:1px solid var(--orange-soft); padding:2px 9px; border-radius:100px; margin-left:8px;}
+  .pill.free{color:var(--green-ink); background:var(--green); border-color:var(--green-line);}
+  .pill.paid{color:var(--red-ink); background:var(--red); border-color:var(--red-line);}
+  .pill.gate{color:var(--red-ink); background:var(--red); border-color:var(--red-line);}
+  .pill.code{color:var(--blue-ink); background:var(--blue); border-color:var(--blue-line);}
+  .pill.eng{color:var(--blue-ink); background:var(--blue); border-color:var(--blue-line);}
+  .file{font-family:ui-monospace,Menlo,Consolas,monospace; font-size:12px; background:#fff; border:1px solid var(--orange-soft); border-radius:6px; padding:2px 8px; color:var(--ink); white-space:nowrap;}
+  .files{display:flex; gap:6px; flex-wrap:wrap; margin-top:9px; align-items:center;}
+  .files .k{font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);}
+
+  /* cards */
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px;}
+  .grid.three{grid-template-columns:1fr 1fr 1fr;}
+  .grid.four{grid-template-columns:repeat(4,1fr);}
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:18px 20px; box-shadow:var(--shadow);}
+  .card h3{margin:0 0 6px; font-size:16.5px;}
+  .card p{margin:0; font-size:14.5px; color:var(--muted);}
+  .card .ic{font-size:20px; margin-bottom:6px;}
+  .card .file{margin-top:10px; display:inline-block;}
+
+  /* tables */
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:14.5px; background:var(--paper);
+    border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  th,td{text-align:left; padding:10px 13px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{background:var(--wash); font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); font-weight:700;}
+  tr:last-child td{border-bottom:none;}
+  td .file{font-size:11.5px;}
+  td b{color:var(--ink);}
+  td .n{font-family:ui-monospace,Menlo,monospace; font-weight:700; color:var(--orange);}
+  .v{font-weight:700; font-size:12px; padding:2px 9px; border-radius:100px; white-space:nowrap;}
+  .v.covered{color:var(--green-ink); background:var(--green); border:1px solid var(--green-line);}
+  .v.partial{color:#a6791b; background:var(--yellow-soft); border:1px solid var(--yellow);}
+  .v.no{color:var(--red-ink); background:var(--red); border:1px solid var(--red-line);}
+  .t-tag{font-family:ui-monospace,Menlo,monospace; font-size:11.5px; font-weight:700; padding:1px 7px; border-radius:5px; background:var(--wash); border:1px solid var(--orange-soft);}
+  .scroll{overflow-x:auto;}
+
+  .define{background:var(--paper); border:1px dashed var(--orange-soft); border-radius:12px; padding:14px 18px; margin:18px 0; font-size:15px;}
+  .define b{color:var(--orange);}
+
+  /* data-structure anatomy */
+  .cardbox{background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:8px; margin:20px 0;}
+  .field{display:flex; gap:14px; padding:11px 12px; align-items:baseline;}
+  .field+.field{border-top:1px solid var(--line);}
+  .field .fk{flex:none; width:130px; font-family:ui-monospace,Menlo,monospace; font-size:12.5px; font-weight:700; color:var(--orange);}
+  .field .fv{font-size:14.5px; color:var(--muted);}
+  .field .fv b{color:var(--ink);}
+
+  /* two-column compare */
+  .agents{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:22px 0;}
+  .agent{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:20px; box-shadow:var(--shadow);}
+  .agent .cap{width:44px; height:44px; border-radius:12px; display:grid; place-items:center; font-size:22px; margin-bottom:10px;}
+  .agent.asker .cap{background:var(--yellow-soft); border:2px solid var(--yellow);}
+  .agent.answ .cap{background:var(--orange-soft); border:2px solid var(--orange);}
+  .agent h3{margin:0 0 2px; font-size:19px;} .agent .role{font-size:13px; color:var(--muted); margin-bottom:12px;}
+  .mem{font-size:14px; padding:9px 12px; border-radius:10px; margin-top:9px;}
+  .mem.yes{background:var(--green); border:1px solid var(--green-line);}
+  .mem.no{background:var(--blue); border:1px solid var(--blue-line);}
+  .mem .lbl{font-weight:700; font-size:11px; letter-spacing:.08em; text-transform:uppercase;}
+  .mem.yes .lbl{color:var(--green-ink);} .mem.no .lbl{color:var(--blue-ink);}
+
+  /* inline sub-step chips */
+  .subflow{display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 2px;}
+  .schip{font-size:12.5px; background:var(--paper); border:1px solid var(--orange-soft); border-radius:100px; padding:4px 11px; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:6px;}
+  .schip .n{width:17px; height:17px; border-radius:100px; background:var(--orange); color:#fff; font-size:11px; display:grid; place-items:center; font-weight:800;}
+  .arrow{color:var(--orange-soft); font-weight:800; align-self:center;}
+
+  /* headline stats */
+  .stats{display:flex; gap:14px; flex-wrap:wrap; margin-top:18px;}
+  .stat{flex:1; min-width:150px; background:var(--wash); border:1px solid var(--orange-soft); border-radius:14px; padding:16px 18px;}
+  .stat .big{font-size:30px; font-weight:800; letter-spacing:-.02em;}
+  .stat .cap{font-size:13px; color:var(--muted);}
+
+  /* engine chain */
+  .chain{display:flex; flex-wrap:wrap; align-items:stretch; gap:8px; margin:22px 0;}
+  .link{flex:1; min-width:120px; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:12px 10px; text-align:center; box-shadow:var(--shadow);}
+  .link .em{font-size:20px;} .link b{display:block; font-size:13px; margin:4px 0 1px;} .link small{color:var(--muted); font-size:11.5px;}
+  .link.pick{background:var(--wash); border-color:var(--orange-soft);}
+  .link.out{background:var(--green); border-color:var(--green-line);}
+  .chev{align-self:center; color:var(--orange-soft); font-weight:800; font-size:18px;}
+
+  /* before / after */
+  .ba{display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:center; margin:20px 0;}
+  .ba .box{background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:var(--shadow); text-align:center;}
+  .ba .box .n{font-size:26px; font-weight:800;} .ba .box small{color:var(--muted); font-size:12.5px;}
+  .ba .arr{font-size:22px; color:var(--orange); font-weight:800;}
+  .ba .box.after{border-color:var(--green-line); background:var(--green);}
+
+  /* the prompt catalogue */
+  .pcard{background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:16px 18px; margin:14px 0;}
+  .pcard .ph{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; margin-bottom:6px;}
+  .pcard .pn{font-family:ui-monospace,Menlo,Consolas,monospace; font-size:14px; font-weight:700; color:var(--ink);
+    background:var(--wash); border:1px solid var(--orange-soft); border-radius:7px; padding:2px 9px;}
+  .pcard .pwho{font-size:12px; color:var(--muted); font-weight:600;}
+  .pcard .pdoes{margin:0 0 8px; font-size:15px;}
+  .pcard .pint{margin:0 0 10px; font-size:14.5px; color:var(--muted); padding-left:18px;}
+  .pcard .pint li{margin:4px 0;}
+  .pcard .pint b{color:var(--ink);}
+  .pl{display:inline-block; font-size:12.5px; font-weight:700; color:#fff; background:var(--orange); border-radius:100px;
+    padding:4px 13px; text-decoration:none;}
+  .pl:hover{background:#e06d00;}
+  .quote{border-left:3px solid var(--yellow); background:var(--cream); padding:8px 14px; margin:8px 0; font-size:14px;
+    font-style:italic; color:var(--muted);}
+  .quote b{font-style:normal;}
+
+  footer{padding:40px 0 60px; color:var(--muted); font-size:13.5px;}
+  @media(max-width:760px){ .agents,.grid,.grid.three,.grid.four{grid-template-columns:1fr;} .ba{grid-template-columns:1fr;} .chev{display:none;} .field{flex-direction:column; gap:2px;} .field .fk{width:auto;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">Content Machine &middot; Stage 04 &middot; Write Phase</div>
+    <h1>How the <span class="hl">Write Phase</span> turns a pile of research into a finished article</h1>
+    <p class="lede">Research finds the material. The write phase decides what makes the cut, checks that every number
+    is real, designs the article, writes it, cleans it, and links it. Three programs, seventeen steps, thirty-three AI
+    prompts. This page walks through every one of them, names the file that does the work, links the exact prompt text,
+    and shows you how to judge the output yourself.</p>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#idea">01 The one idea</a>
+    <a href="#words">02 The words</a>
+    <a href="#runners">03 The three runners</a>
+    <a href="#pipeline">04 The 17 steps</a>
+    <a href="#planner">05 The Planner</a>
+    <a href="#architect">06 The Architect</a>
+    <a href="#writer">07 The Writer</a>
+    <a href="#prompts">08 Every prompt</a>
+    <a href="#evaluate">09 How to check it</a>
+    <a href="#status">10 Built vs not built</a>
+    <a href="#sits">11 Where it sits</a>
+  </div>
+</nav>
+
+<section id="idea">
+  <div class="wrap">
+    <h2><span class="num">01</span>The one idea</h2>
+    <p class="sub">Before any file names, here is the whole thing in four moves. A research bundle comes in at one end.
+    A publish-ready article comes out the other.</p>
+
+    <div class="grid four">
+      <div class="card">
+        <div class="ic">&#128203;</div>
+        <h3>1. Vet the material</h3>
+        <p>Research hands over hundreds of fact cards under a menu of candidate headings. The Planner judges each
+        sub-topic, drops the ones that serve nothing, and checks that every number has a real source page behind it.</p>
+      </div>
+      <div class="card">
+        <div class="ic">&#128208;</div>
+        <h3>2. Design the article</h3>
+        <p>The Architect throws away the research outline and designs the real one: which sections, in what order,
+        what each one must deliver, how many words it gets, and what its heading says.</p>
+      </div>
+      <div class="card">
+        <div class="ic">&#9997;</div>
+        <h3>3. Write it</h3>
+        <p>Every section is written at the same time by a separate AI call that can only see its own facts. An editor
+        then stitches them into one continuous piece and writes the intro, takeaways, FAQ and close.</p>
+      </div>
+      <div class="card">
+        <div class="ic">&#129529;</div>
+        <h3>4. Clean and link it</h3>
+        <p>An AI strips the tells that make writing sound machine-made. Code scrubs invisible characters. Internal and
+        external links go in. The finished draft comes out with every statistic traceable to its source.</p>
+      </div>
+    </div>
+
+    <div class="note orange">
+      <span class="tag">The one rule that governs everything</span>
+      <p style="margin:8px 0 8px"><b>Code counts. The AI judges.</b> If you can count it, a script does it. If two
+      sensible people could disagree about it, the AI does it.</p>
+      <ul style="margin-bottom:0">
+        <li><b>Code does:</b> word counts, keyword counts, "did every promised statistic actually land in the draft",
+        "does this link return a real page", "is this source tag one the writer was actually given".</li>
+        <li><b>The AI does:</b> whether a sub-topic earns its place, whether a page really supports a claim, what a
+        section's heading should say, whether a sentence reads like a human wrote it.</li>
+      </ul>
+      <p style="margin:8px 0 0">The reason: if you ask an AI "is this title under 60 characters" it eyeballs it and
+      often gets it wrong. <span class="file">len(title)</span> does not guess. And if you ask a script "is this
+      section any good", it invents an arbitrary formula.</p>
+    </div>
+
+    <div class="note red">
+      <span class="tag r">The second rule</span>
+      <p style="margin:8px 0 0"><b>Nothing is invented.</b> Every fact in the finished article traces back to an
+      evidence card that carries a verbatim quote and a source URL. The writers are handed a fixed list of facts and
+      told they may use nothing else. Every step after the writers, the editor, the wrapper writer, the style cleaner,
+      sees only prose and never the cards, so none of them can add a fact. Code then checks their output and strips
+      any source tag that was not there before.</p>
+    </div>
+  </div>
+</section>
+
+<section id="words" style="background:var(--cream);">
+  <div class="wrap">
+    <h2><span class="num">02</span>The words you need first</h2>
+    <p class="sub">Every term used on this page, defined once, in plain English. If a later section uses a word you
+    do not recognise, it is here.</p>
+
+    <div class="define"><b>Bundle</b> &mdash; what the research phase hands over for one topic. Two files: a structure
+    JSON holding the candidate headings and all the evidence, and a cover sheet pointing at everything else
+    (the search-results study, the brand voice files, the research brief).</div>
+
+    <div class="define"><b>Card</b> (evidence card) &mdash; one fact, with proof attached. It carries an id number,
+    a one-line summary ("gloss"), the source text word for word ("verbatim"), and the URL of the page it came from.
+    A single article can arrive with over 3,000 of them. Cards are the only facts a writer is allowed to use.</div>
+
+    <div class="define"><b>[c412] tag</b> &mdash; the marker a writer puts straight after a fact, naming the card it
+    came from. It travels with the sentence through every later step, which is how the finished article can turn each
+    statistic into a source link, and how code can catch a fact that was invented.</div>
+
+    <div class="define"><b>H1 / H2 / H3</b> &mdash; heading levels. H1 is the article's title. H2s are its sections.
+    H3s are the sub-topics inside a section. Research delivers a menu of candidate H2s, each holding several H3s, and
+    the cards usually hang off the H3s.</div>
+
+    <div class="define"><b>Box</b> &mdash; when the Architect redesigns the article, every surviving H3 is turned into
+    a numbered box (#1, #2, #3&hellip;) with its cards inside. The AI designing the structure answers only with
+    headlines and box numbers, so it can shuffle the material freely but cannot invent material that does not exist.</div>
+
+    <div class="define"><b>Spine</b> &mdash; one short paragraph saying what the whole article argues, who it is for,
+    and what the reader can do at the end. The Architect writes it before anything else, and every later step is
+    judged against it. If a section does not serve the spine, it does not belong.</div>
+
+    <div class="define"><b>The world (about / not-about)</b> &mdash; two lines, decided back in the research phase,
+    stating what this article is about and what it is deliberately not about. It exists because the same words mean
+    different things in different fields. An article about Type D personality in hiring must not pull in cardiology
+    research, even though every search result mentions it. The world lines ride into almost every prompt in the
+    pipeline as a first test: wrong world is a harder no than merely off-topic.</div>
+
+    <div class="define"><b>Archetype</b> &mdash; which of eight article shapes this piece is: a definitional explainer,
+    a how-to guide, a listicle, a comparison, a glossary, a data report, a template resource, or plain editorial
+    ("common spine"). The archetype decides which structure prompt runs and which shape rules apply.</div>
+
+    <div class="define"><b>Gap / table stake / PAA / related search</b> &mdash; the four kinds of promise a sub-topic
+    can serve. A <b>gap</b> is something no competitor covers, so it is ours to own. A <b>table stake</b> is a topic
+    every competitor covers, so leaving it out looks thin. <b>PAA</b> is "People Also Ask", the questions Google shows
+    under a search result. A <b>related search</b> is what Google lists at the bottom of the page. Each one gets an id
+    (G1, T2, Q3, R4) so a sub-topic can point at exactly which promise it delivers.</div>
+
+    <div class="define"><b>Orphan</b> &mdash; a good sub-topic whose parent section was cut. Rather than lose it, the
+    Planner asks an AI to file it into the best surviving section. Nothing valuable is dropped just because its
+    neighbour was weak.</div>
+
+    <div class="define"><b>Benched</b> &mdash; material the Architect chose not to use. It is not deleted. It is listed
+    with a one-line reason, so you can see what was left on the table and disagree if you want.</div>
+
+    <div class="define"><b>Word band</b> &mdash; the target length range for the article, worked out in the research
+    phase from how long the currently-winning pages are. A band like 3,000 to 4,000 words. The Architect splits the
+    midpoint of that band across the sections.</div>
+
+    <div class="define"><b>Volume and KD</b> &mdash; two numbers from search data. <b>Volume</b> is roughly how many
+    people search that phrase per month. <b>KD</b> is keyword difficulty, a 0 to 100 score for how hard it would be to
+    rank. A section keyword has to clear 100 monthly searches and stay under 40 difficulty to be considered.</div>
+
+    <div class="define"><b>Slop</b> &mdash; the patterns that make text read as machine-written. Em dashes everywhere,
+    words like "delve", "robust", "landscape", "seamless", three-item lists on a loop, every sentence the same length,
+    "it's not X, it's Y". The slop step removes them without touching a single fact.</div>
+
+    <div class="define"><b>Provenance</b> &mdash; the record of which card each sentence's facts came from. Built by
+    code from the [c] tags, not reported by the AI about itself.</div>
+
+    <div class="define"><b>Eval page</b> &mdash; a self-contained HTML page the pipeline builds for you after each
+    stage, showing what it decided and why. Seven of them per article. Section 09 covers what is on each.</div>
+
+    <div class="define"><b>Atomic save</b> &mdash; every file is written to a temporary name first and then renamed
+    into place. A crash halfway through leaves the old complete file, never a half-written one. This matters because
+    every step skips itself if its output file already exists, so a half-written file would be silently trusted.</div>
+  </div>
+</section>
+
+<section id="runners">
+  <div class="wrap">
+    <h2><span class="num">03</span>The three runners, and the files they all share</h2>
+    <p class="sub">The write phase is three commands you run in order. Each is a thin sequencing script: it calls its
+    steps one after another and does nothing else. All the actual work lives in the step files.</p>
+
+    <div class="chain">
+      <div class="link pick"><div class="em">&#128230;</div><b>Research bundle</b><small>cards + candidate headings</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link"><div class="em">&#128203;</div><b>The Planner</b><small>5 steps &middot; vet the material</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link"><div class="em">&#128208;</div><b>The Architect</b><small>5 steps &middot; design the article</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link"><div class="em">&#9997;</div><b>The Writer</b><small>7 steps &middot; write and finish it</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link out"><div class="em">&#128196;</div><b>draft.md</b><small>+ 7 review pages</small></div>
+    </div>
+
+    <table>
+      <tr><th>Command</th><th>What it produces</th><th>Its steps</th></tr>
+      <tr>
+        <td><span class="file">run_planner.py --slug &lt;slug&gt;</span></td>
+        <td><b>article-plan.json</b><br><span class="muted">the frozen list of what this article will cover, with every
+        number sourced</span></td>
+        <td>gather &middot; select &middot; verify-sources &middot; freeze &middot; plan-view</td>
+      </tr>
+      <tr>
+        <td><span class="file">run_architect.py --slug &lt;slug&gt;</span></td>
+        <td><b>structure.json</b><br><span class="muted">the real article design: sections, order, jobs, word targets,
+        headings</span></td>
+        <td>shape &middot; enrich &middot; allocate &middot; section-keywords &middot; headings</td>
+      </tr>
+      <tr>
+        <td><span class="file">run_writer.py --slug &lt;slug&gt;</span></td>
+        <td><b>draft.md</b> + <b>article.html</b><br><span class="muted">the finished article and the page you review
+        it on</span></td>
+        <td>write-body &middot; blend &middot; wrapper &middot; slop &middot; links &middot; clean &middot; assemble</td>
+      </tr>
+    </table>
+
+    <div class="note">
+      <span class="tag">Two properties every step has</span>
+      <ul style="margin:8px 0 0">
+        <li><b>It writes one named file.</b> The next step reads that file. So the whole pipeline is a chain of files
+        you can open, and you can point at any output and name the step that made it.</li>
+        <li><b>It skips itself if that file already exists.</b> A crash resumes where it stopped, and you never pay
+        twice for the same search. Add <span class="file">--redo</span> to force everything to run again.</li>
+      </ul>
+    </div>
+
+    <h3>The five files every step leans on</h3>
+    <div class="scroll">
+    <table>
+      <tr><th>File</th><th>What it does</th></tr>
+      <tr><td><span class="file">config.py</span></td><td>The one settings hub. Every path is worked out from a single
+        anchor, so pointing the engine at a different company is a one-line change. Every tunable number lives here with
+        a comment: the survival threshold, how many pages to download, the keyword floors, the minimum credit balance.
+        No magic numbers scattered through the code.</td></tr>
+      <tr><td><span class="file">llm.py</span></td><td>The one door to the AI. Two functions: ask for text, or ask for
+        JSON. The JSON one pulls the answer out even when the model wraps it in code fences or chatty prose, and asks
+        again once if it cannot parse it. It also decides how many calls can run in parallel, which depends on the
+        provider.</td></tr>
+      <tr><td><span class="file">write_atomic.py</span></td><td>The safe-save helper. Writes to a temp file in the same
+        folder, then renames it over the target. A file existing therefore guarantees it is complete.</td></tr>
+      <tr><td><span class="file">tags.py</span></td><td>The single definition of the <span class="file">[c412]</span>
+        source tag. It exists because every step used to carry its own pattern, and none of them matched the multi-card
+        form <span class="file">[c1, c2]</span>. Thirty-one raw tags shipped into one finished draft before this was
+        fixed.</td></tr>
+      <tr><td><span class="file">article_ctx.py</span></td><td>One shared reader for the article's title, angle, spine
+        and world, each pulled from its real owner. Before it existed, each step worked these out for itself and the
+        world lines reached almost nothing.</td></tr>
+    </table>
+    </div>
+
+    <h3>Free work and paid work</h3>
+    <div class="agents">
+      <div class="agent asker">
+        <div class="cap">&#129504;</div>
+        <h3>The AI calls</h3>
+        <div class="role">33 prompts, run through a chain of providers</div>
+        <p style="font-size:14.5px; margin:0 0 8px">The default order is DeepSeek first, then Claude, then Codex. If one
+        provider keeps failing, the next takes over automatically. Claude and Codex run through the locally logged-in
+        command line, so they cost nothing beyond the subscription. DeepSeek is a paid API but very cheap.</p>
+        <div class="mem yes"><span class="lbl">Cost</span><br>Effectively free on Claude or Codex. Cents on DeepSeek.</div>
+      </div>
+      <div class="agent answ">
+        <div class="cap">&#128179;</div>
+        <h3>The paid lookups</h3>
+        <div class="role">DataForSEO, used at three points</div>
+        <ul style="font-size:14.5px; margin:0 0 8px; padding-left:18px; color:var(--muted)">
+          <li><b>Source hunting</b> when a claim's link turns out to be wrong</li>
+          <li><b>Enrichment</b> when a section does not have enough material</li>
+          <li><b>Section keywords</b>, one lookup per seed phrase</li>
+        </ul>
+        <p style="font-size:14.5px; margin:0 0 8px">Searches are batched through the standard queue, measured at
+        $0.0006 each against $0.002 for the live version. Before spending anything the engine reads the account balance;
+        below the floor it falls back to a free Claude web search instead.</p>
+        <div class="mem no"><span class="lbl">Guardrail</span><br>A failed search never deletes a fact. It flags it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pipeline" style="background:var(--cream);">
+  <div class="wrap">
+    <h2><span class="num">04</span>The 17 steps, start to finish</h2>
+    <p class="sub">Every step, in run order. Each one names the script that does the work, the file it writes, and the
+    prompts it uses. Follow the orange link on any step to jump to the detailed walkthrough.</p>
+
+    <div class="phase">Phase 1 &middot; The Planner &middot; vet the material</div>
+    <div class="flow">
+
+      <div class="step">
+        <div class="dot">1</div>
+        <div class="step-body">
+          <h3>Gather<span class="pill free">free</span><span class="pill code">mostly code</span></h3>
+          <p>Pull everything this article needs into one file, so no later step goes hunting.</p>
+          <ul>
+            <li>Copies the research bundle, the research brief, the winners study and the queue row across as they are.</li>
+            <li>Three AI calls do the parts that need reading: lift the winners lists out of prose, read the word band
+            out of the brief, and throw away the Google questions that belong to a different field.</li>
+            <li>Before that, a router decides which of the eight article shapes this is.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">gather_inputs.py</span>
+            <span class="k">writes</span><span class="file">gather/plan-inputs.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">route-archetype.md</span><span class="file">extract-winners.md</span><span class="file">extract-word-band.md</span><span class="file">vet-lists.md</span></div>
+          <div style="margin-top:9px"><a class="xref" href="#planner">&darr; &sect;05 &mdash; the Planner in detail</a></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">2</div>
+        <div class="step-body">
+          <h3>Select<span class="pill free">free</span><span class="pill">AI judges</span></h3>
+          <p>Decide what this article will actually cover. This is where most of the material dies.</p>
+          <ul>
+            <li>One AI call per candidate section, all running at once, tags every sub-topic with what it contributes:
+            the article's angle, a gap, a table stake, a question people ask, or a related search.</li>
+            <li>Every tag must name the card that proves it. No card, no tag.</li>
+            <li>Then pure arithmetic: a section survives if at least 45% of its sub-topics earned a tag, and keeps only
+            the tagged ones. Below that, the section dies and its good sub-topics become orphans.</li>
+            <li>A second AI call files every orphan into the best surviving section.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">plan_select.py</span>
+            <span class="k">writes</span><span class="file">_work/article-plan.tagged.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">tag-h3s.md</span><span class="file">place-orphans.md</span></div>
+          <div style="margin-top:9px"><a class="xref" href="#planner">&darr; &sect;05 &mdash; the 45% rule, with real numbers</a></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">3</div>
+        <div class="step-body">
+          <h3>Verify sources<span class="pill paid">paid</span><span class="pill">the deep one</span></h3>
+          <p>Every citable number gets a real source, or the fact is cut. The longest and most important step in the
+          pipeline.</p>
+          <ul>
+            <li>Code finds every card whose text carries a number. An AI decides which of those genuinely need a
+            citation, so "step 3" and "in 2026" are not chased.</li>
+            <li>For each one, the page it credits is downloaded and an AI judge reads it and answers: does this page
+            state this fact, about the same subject?</li>
+            <li>Wrong or missing means a hunt: plan three searches, run them, download the results, judge each page,
+            and repair the card's link. Still nothing means the card is cut.</li>
+            <li>Any URL proven wrong is remembered, and every other card citing it is rechecked.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">verify_sources.py</span>
+            <span class="k">writes</span><span class="file">_work/article-plan.verified.json</span><span class="file">_work/source-police.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">verify-worthy.md</span><span class="file">source-judge.md</span><span class="file">source-queries.md</span><span class="file">search-urls.md</span></div>
+          <div style="margin-top:9px"><a class="xref" href="#planner">&darr; &sect;05 &mdash; how the source police works</a></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">4</div>
+        <div class="step-body">
+          <h3>Freeze<span class="pill code">pure code</span><span class="pill gate">gate</span></h3>
+          <p>The bouncer. It checks the plan's shape and stamps the one file the Architect is allowed to read.</p>
+          <ul>
+            <li><b>Hard flags stop the run:</b> no sections, a section with no sub-topics, a sub-topic with no evidence,
+            a missing headline or keyword, a missing word band.</li>
+            <li><b>Soft notes are recorded but never block:</b> a promise nothing covers, fewer than three sections,
+            more than 15 cards cut by source verification.</li>
+            <li>It makes no judgments of its own. Every judgment already happened upstream.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">freeze.py</span>
+            <span class="k">writes</span><span class="file">planner/article-plan.json</span><span class="file">_work/freeze-report.json</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">5</div>
+        <div class="step-body">
+          <h3>Plan view<span class="pill code">pure code</span></h3>
+          <p>Renders the frozen plan as plain-English markdown so a human can read it without opening JSON. It decides
+          nothing, so it can be rebuilt at any time.</p>
+          <div class="files"><span class="k">script</span><span class="file">plan_view.py</span>
+            <span class="k">writes</span><span class="file">planner/article-plan.md</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">Phase 2 &middot; The Architect &middot; design the article</div>
+    <div class="flow">
+
+      <div class="step">
+        <div class="dot">6</div>
+        <div class="step-body">
+          <h3>Shape<span class="pill free">free</span><span class="pill">AI designs</span></h3>
+          <p>Throw away the research outline and design the real article, with full freedom.</p>
+          <ul>
+            <li>Every surviving sub-topic becomes a numbered box. The AI answers only with headlines and box numbers,
+            so it can restructure anything but cannot invent material.</li>
+            <li>It writes the spine first, then each section's job, then its headline, then fills it with boxes.</li>
+            <li>Different article shapes take different roads. A listicle first detects its list items. A comparison
+            first detects the options, then the yardsticks, then drops options the material cannot cover.</li>
+            <li>Anything it leaves out has to be justified in one line if it carried a promise or hard numbers.</li>
+            <li>A section that lacks material can raise a research request instead of padding.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">shape.py</span>
+            <span class="k">writes</span><span class="file">_work/structure.shaped.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">structure-simple.md</span><span class="file">structure-listicle.md</span><span class="file">structure-comparison.md</span><span class="file">structure-template.md</span><span class="file">detect-items.md</span><span class="file">detect-entities.md</span><span class="file">find-yardsticks.md</span><span class="file">filter-tools.md</span></div>
+          <div style="margin-top:9px"><a class="xref" href="#architect">&darr; &sect;06 &mdash; the box system</a></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">7</div>
+        <div class="step-body">
+          <h3>Enrich<span class="pill paid">paid</span></h3>
+          <p>Go and find whatever the structure asked for. Only runs if the shape step raised a research request.</p>
+          <ul>
+            <li>Per missing sub-topic: plan up to 3 searches, run them, download up to 15 pages that load, then build
+            new evidence cards from what they actually say.</li>
+            <li>Every new card summarises one page only. Blending two sources into one card is banned.</li>
+            <li>New cards get ids from 9001 up, so they are always distinguishable from research cards.</li>
+            <li>A failed search on one sub-topic never blocks the rest.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">enrich.py</span>
+            <span class="k">writes</span><span class="file">architect/structure.json</span><span class="file">architect/enriched-cards.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">plan-queries.md</span><span class="file">extract-cards.md</span><span class="file">search-urls.md</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">8</div>
+        <div class="step-body">
+          <h3>Allocate words<span class="pill free">free</span></h3>
+          <p>Give every section a word target, judged by importance rather than by how much evidence it happens to hold.</p>
+          <ul>
+            <li>The base is the midpoint of the word band, not the ceiling, so there is room to trim later.</li>
+            <li>An AI decides each section's percentage share and gives a one-line reason. Code does the arithmetic so
+            the shares always total 100.</li>
+            <li>No section may fall below 4%. Anything that small should not be its own section.</li>
+            <li>A failed call falls back to an even split. The pipeline never stalls here.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">allocate_words.py</span>
+            <span class="k">writes</span><span class="file">_work/word-allocation.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">allocate-words.md</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">9</div>
+        <div class="step-body">
+          <h3>Section keywords<span class="pill paid">paid</span></h3>
+          <p>Work out which sections deserve their own search keyword, and buy real data for only those.</p>
+          <ul>
+            <li><b>The gate, free:</b> one AI call over the whole article asks, per section, would a person type this
+            section's subject into Google as its own search? Most sections should be no, and the prompt says so.</li>
+            <li><b>The hunt, paid:</b> for each yes, read that section's cards (not its heading, which can lie), write
+            2 or 3 short seed phrases, look each up, and keep only results above 100 monthly searches and under 40
+            difficulty.</li>
+            <li>Then pick one keyword, or none. The prompt states that returning nothing is a good answer.</li>
+            <li>This step exists because the research phase used to buy a keyword per planned heading, and the Architect
+            then deleted those headings. One real article bought 5 keywords for 17 sections, 3 of them for sections
+            that no longer existed.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">section_keywords.py</span>
+            <span class="k">writes</span><span class="file">_work/section-keywords.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">keyword-gate.md</span><span class="file">section-seeds.md</span><span class="file">pick-section-keyword.md</span></div>
+          <div style="margin-top:9px"><a class="xref" href="#architect">&darr; &sect;06 &mdash; why the gate exists</a></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">10</div>
+        <div class="step-body">
+          <h3>Headings<span class="pill free">free</span></h3>
+          <p>Write the final heading for every section, then the H1, with the evidence in view.</p>
+          <ul>
+            <li>One call per section, in parallel. Each sees that section's full evidence, its own researched keyword,
+            the leftover keyword pool, and the primary keyword, and is free to use none of them.</li>
+            <li>The rule that matters: the job was written before the research came back, the evidence is what the
+            section really holds now, and where they disagree the evidence wins.</li>
+            <li>Aim under 60 characters. Go over only when the shorter version genuinely says less.</li>
+            <li>One keyword per heading, never two. A heading holding two search phrases reads as written for a machine.</li>
+            <li>Then a final call writes the H1, having seen every finished heading.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">headings.py</span>
+            <span class="k">writes</span><span class="file">architect/structure.json</span><span class="file">_work/heading-map.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">write-heading.md</span><span class="file">write-h1.md</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">Phase 3 &middot; The Writer &middot; write it and finish it</div>
+    <div class="flow">
+
+      <div class="step">
+        <div class="dot">11</div>
+        <div class="step-body">
+          <h3>Write body<span class="pill free">free</span><span class="pill">the writing</span></h3>
+          <p>One AI writer per section, all running at the same time.</p>
+          <ul>
+            <li>Each writer sees only its own cards, so it cannot use a fact it was not given.</li>
+            <li>It also sees the spine and every other section's brief, but never their text, so twelve separately
+            written sections pull in one direction and none can refer to prose that does not exist yet.</li>
+            <li>The prompt splits its instructions into fact rules and writing rules, and it is deliberately keyword
+            blind. Nobody writing prose is thinking about search phrases.</li>
+            <li>Code then reads the [c] tags and builds the provenance list. A tag pointing at a card the writer was
+            not given is dropped and counted.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">write_body.py</span>
+            <span class="k">writes</span><span class="file">writer/_work/body.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">write-body.md</span></div>
+          <div style="margin-top:9px"><a class="xref" href="#writer">&darr; &sect;07 &mdash; what the writer may and may not do</a></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">12</div>
+        <div class="step-body">
+          <h3>Blend<span class="pill free">free</span></h3>
+          <p>The editor makes the separately written sections read as one piece.</p>
+          <ul>
+            <li>Allowed exactly four moves: add a transition, cut a repetition, shorten a second definition to a
+            reference, fix a broken back-reference. Plus one more job: swap a vague phrase for the exact keyword where
+            the sentence already says that thing.</li>
+            <li>It sees only prose, never the cards, so it cannot add a fact.</li>
+            <li>Code then audits the tags. A tag present after blending that never existed before is an invention and
+            is stripped. Tags that disappeared are logged too.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">blend.py</span>
+            <span class="k">writes</span><span class="file">writer/_work/blend.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">blend.md</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">13</div>
+        <div class="step-body">
+          <h3>Wrapper<span class="pill free">free</span></h3>
+          <p>Write what sits around the article: the intro, the key takeaways, the FAQ and the close.</p>
+          <ul>
+            <li>Written by the only AI that has read the whole finished piece.</li>
+            <li>The intro must open with the answer, not a description of the article. Ten opening shapes are banned by
+            name, including "This article breaks down" and "Here's everything you need to know about".</li>
+            <li>Exactly 5 FAQs, each of which must pass a five-part test, and no two may share an answer.</li>
+            <li>The close is grounded in the company's real feature list and is a forward call to action, not a recap.</li>
+            <li>Adding an intro and a close creates two new seams, so it also returns touch-ups to the first and last
+            sections.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">wrapper.py</span>
+            <span class="k">writes</span><span class="file">writer/_work/wrapper.json</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">wrapper.md</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">14</div>
+        <div class="step-body">
+          <h3>Slop pass<span class="pill free">free</span></h3>
+          <p>Strip the patterns that make writing read machine-made, without touching a single fact.</p>
+          <ul>
+            <li>The AI proposes, code verifies. Per block: the set of numbers must be identical before and after, and
+            the set of source tags must be identical.</li>
+            <li>Any violation, or a malformed reply, and that block keeps its original text and the failure is logged
+            loudly.</li>
+            <li>A block with no tells comes back unchanged, character for character.</li>
+            <li>The ruleset is a separate 402-line file, so tuning a rule means editing one place.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">slop_pass.py</span>
+            <span class="k">writes</span><span class="file">writer/_work/polish.json</span><span class="file">writer/slop-review.html</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">slop.md</span><span class="file">slop-rules.md</span></div>
+          <div style="margin-top:9px"><a class="xref" href="#writer">&darr; &sect;07 &mdash; the guard that throws work away</a></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">15</div>
+        <div class="step-body">
+          <h3>Links<span class="pill free">free</span></h3>
+          <p>Three separate pools, three separate judges, everything else code.</p>
+          <ul>
+            <li><b>Internal, 3 to 5:</b> anchors are laid over words that already exist. Nothing is added or reworded.
+            An anchor that does not match the body character for character is thrown away.</li>
+            <li><b>Read more, usually 0:</b> the article's meaning is matched against the whole site index. Zero is the
+            expected answer, and the prompt says so. Two is the absolute maximum.</li>
+            <li><b>External, up to 10:</b> chosen from the article's own verified citations. Competitors and our own
+            domain are removed by code first. Only these become visible links.</li>
+            <li>Then the integrity check: undo every declared change and the text must equal what went in. Anything
+            undeclared is reverted.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">links_pass.py</span>
+            <span class="k">writes</span><span class="file">writer/_work/linked.json</span><span class="file">writer/links-review.html</span></div>
+          <div class="files"><span class="k">prompts</span><span class="file">inline-links.md</span><span class="file">read-more.md</span><span class="file">external-links.md</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">16</div>
+        <div class="step-body">
+          <h3>Clean<span class="pill code">pure code</span><span class="pill free">free</span></h3>
+          <p>The mechanical scrub. No AI, no judgment, no cost, and it never rewrites a word.</p>
+          <ul>
+            <li>Removes invisible Unicode characters. One real draft carried 31 narrow no-break spaces that survived
+            every other pass, sitting inside "85 %" and "New York City". No human types one.</li>
+            <li>Removes en dashes as well as em dashes. The slop pass only names em dashes, so 7 en dashes shipped in
+            that same draft. A numeric range becomes "to", never a comma.</li>
+            <li>Fixes whitespace: double spaces, spaces before punctuation, trailing spaces, stacked blank lines.</li>
+            <li>Runs last, because every earlier step can introduce a stray character of its own, and this is the
+            cheapest step to repeat.</li>
+            <li>Curly quotes are deliberately left alone. Word, Docs, macOS and iOS all curl quotes, so they are normal
+            in human prose.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">clean.py</span>
+            <span class="k">writes</span><span class="file">writer/_work/scrubbed.json</span><span class="file">_work/clean-report.json</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="dot">17</div>
+        <div class="step-body">
+          <h3>Assemble<span class="pill code">pure code</span></h3>
+          <p>Turn the parts into the finished article, and into a page you can review it on.</p>
+          <ul>
+            <li>Builds <span class="file">draft.md</span>: H1, intro, takeaways, sections, FAQ, close, sources.</li>
+            <li>Turns the surviving [c] tags into numbered source links for the curated external sources.</li>
+            <li>Counts keyword coverage from the finished text. Code owns this, because a count the AI reported about
+            itself would be a guess. Matching ignores case and treats "cost per hire" and "cost-per-hire" as the same
+            phrase.</li>
+            <li>Builds <span class="file">article.html</span>, where you can hover any statistic to see its source and
+            any highlighted phrase to see what kind of keyword it is.</li>
+          </ul>
+          <div class="files"><span class="k">script</span><span class="file">assemble.py</span> <span class="file">review_page.py</span>
+            <span class="k">writes</span><span class="file">writer/draft.md</span><span class="file">writer/article.html</span><span class="file">_work/keyword-coverage.json</span></div>
+          <div style="margin-top:9px"><a class="xref" href="#evaluate">&darr; &sect;09 &mdash; how to review the output</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="planner">
+  <div class="wrap">
+    <h2><span class="num">05</span>The Planner, in detail</h2>
+    <p class="sub">The Planner never writes a word. Its whole job is to decide what is true and what is worth covering,
+    so that everything downstream is working with clean material. All numbers below are from the five real articles
+    already run through the engine.</p>
+
+    <h3>What arrives from research</h3>
+    <p>The bundle is a menu, not an article. Its own instructions say "the writer selects sections and does the wording."
+    A typical bundle carries around 18 candidate sections, each with several sub-topics, and the evidence usually hangs
+    off the sub-topics rather than the sections. Here is what one evidence card looks like.</p>
+
+    <div class="cardbox">
+      <div class="field"><div class="fk">card_id</div><div class="fv">The number the article cites it by. Research cards
+        keep their original ids. Cards the Architect researches later start at <b>9001</b>, so you can always tell
+        where a fact came from.</div></div>
+      <div class="field"><div class="fk">gloss</div><div class="fv">A one-line summary of the fact. This is what names
+        the <b>subject</b>, which is why the source judge reads it: the same number about a different company is not
+        support.</div></div>
+      <div class="field"><div class="fk">verbatim</div><div class="fv">The source text word for word. Nothing is
+        paraphrased into a card.</div></div>
+      <div class="field"><div class="fk">source_urls</div><div class="fv">Where it came from. This is the field the
+        source-verification step checks, repairs, or cuts the card over.</div></div>
+      <div class="field"><div class="fk">tag</div><div class="fv"><b>ownpage</b> or <b>storm</b>, telling you whether it
+        came from reading a competitor's page or from the research phase's own investigation.</div></div>
+    </div>
+
+    <h3>Step 2: the 45% rule, and why arithmetic decides it</h3>
+    <p>The tagging is a judgment, so an AI does it. The survival decision is a count, so code does it. That split is the
+    whole design.</p>
+
+    <div class="subflow">
+      <span class="schip"><span class="n">1</span> AI tags every sub-topic</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">2</span> code counts the tagged share</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">3</span> 45% or more, the section lives</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">4</span> AI rehomes the orphans</span>
+    </div>
+
+    <p>The tagger gets one call per candidate section, and it must point at the card that proves each tag. The prompt is
+    blunt about the failure it is preventing:</p>
+    <div class="quote">"<b>EVERY TAG MUST NAME ITS PROOF.</b> For each tag, give the card id(s) from THIS H3 whose text
+    actually contains the thing the tag claims. If you cannot point to a card, you do not have that tag. Being on the
+    same broad topic as a promise is not serving it."</div>
+
+    <p>Before it tags anything it runs the world test, which was added after a measured failure: 152 of 478 sub-topics
+    across one article came back untagged, and 71 of the survivors held on by the loosest tag alone. The fix was to show
+    the tagger each card's <b>source</b>, not just its words.</p>
+    <div class="quote">"Where a subject shares a WORD with another world, the card's SOURCE is often the only thing that
+    reveals it: a university's page about a student prize contest, a vendor selling a different product, a clinical or
+    academic use of the same term. <b>Read the source, not only the words.</b>"</div>
+
+    <h4>A real run, section by section</h4>
+    <p class="muted" style="font-size:14.5px">From <span class="file">running-hiring-hackathon-that-screens</span>,
+    the first eight candidate sections. Real data.</p>
+    <div class="scroll">
+    <table>
+      <tr><th>Candidate section</th><th>Sub-topics tagged</th><th>Coverage</th><th>Verdict</th></tr>
+      <tr><td>Why technical hiring is shifting from resumes to skills-based assessment</td><td>1 of 5</td><td><span class="n">0.20</span></td><td><span class="v no">CUT</span></td></tr>
+      <tr><td>How realistic skills assessments work in practice</td><td>0 of 3</td><td><span class="n">0.00</span></td><td><span class="v no">CUT</span></td></tr>
+      <tr><td>How to design technical assessments around job-relevant competencies</td><td>6 of 6</td><td><span class="n">1.00</span></td><td><span class="v covered">KEEP</span></td></tr>
+      <tr><td>How to design realistic technical work-sample assessments</td><td>5 of 8</td><td><span class="n">0.62</span></td><td><span class="v covered">KEEP</span></td></tr>
+      <tr><td>How hiring hackathons work as structured work-sample assessments</td><td>10 of 12</td><td><span class="n">0.83</span></td><td><span class="v covered">KEEP</span></td></tr>
+      <tr><td>How should hackathon judging, submissions, demos and follow-up be structured</td><td>6 of 6</td><td><span class="n">1.00</span></td><td><span class="v covered">KEEP</span></td></tr>
+      <tr><td>How should rubrics, scorecards and calibration make hackathon hiring fair</td><td>7 of 9</td><td><span class="n">0.78</span></td><td><span class="v covered">KEEP</span></td></tr>
+      <tr><td>Live demos should use the same anchors as remote review</td><td>1 of 1</td><td><span class="n">1.00</span></td><td><span class="v covered">KEEP</span></td></tr>
+    </table>
+    </div>
+
+    <p>Note the second row. Nothing in that section earned a single tag, so it dies whole. The first row keeps one good
+    sub-topic that becomes an orphan and gets rehomed. Across the five real articles:</p>
+
+    <div class="scroll">
+    <table>
+      <tr><th>Article</th><th>Candidate sections</th><th>Survived</th><th>Cut</th><th>Sub-topics dropped</th><th>Orphans rehomed</th></tr>
+      <tr><td>the-real-cost-recruitment-2026</td><td>16</td><td>14</td><td>2</td><td>11</td><td>2</td></tr>
+      <tr><td>the-type-d-personality-label</td><td>21</td><td>17</td><td>4</td><td>28</td><td>4</td></tr>
+      <tr><td>video-interview-software-that-actually</td><td>21</td><td>14</td><td>7</td><td>30</td><td>1</td></tr>
+      <tr><td>running-hiring-hackathon-that-screens</td><td>23</td><td>17</td><td>6</td><td>33</td><td>2</td></tr>
+      <tr><td>strategic-interview-questions-paired-strong</td><td>39</td><td>26</td><td>13</td><td>50</td><td>2</td></tr>
+    </table>
+    </div>
+
+    <h3>Step 3: the source police</h3>
+    <p>This is the step that separates the engine from a content mill. Every number that a reader would expect a
+    citation for is checked against the page it credits, and the check is a real download and a real read.</p>
+
+    <div class="subflow">
+      <span class="schip"><span class="n">1</span> code finds cards with numbers</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">2</span> AI picks which need proof</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">3</span> fetch the claimed page</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">4</span> AI judge reads it</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">5</span> hunt for a better source</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">6</span> fix the link, or cut the card</span>
+    </div>
+
+    <h4>Five design details worth knowing</h4>
+    <ul>
+      <li><b>The judge reads the right part of the page.</b> Taking the first few thousand characters showed it the
+      site's navigation menu and falsely cut around 21% of claims. It now reads the page's opening plus the passages
+      around the claim's numbers.</li>
+      <li><b>Same number, different subject, is not support.</b> The judge is told: a page stating the same figure about
+      a different company, or about the market in general, gets a no.</li>
+      <li><b>One request at a time per website.</b> Bursting a host makes it serve a block page instead of content,
+      which reads as a failed verification when the source was fine.</li>
+      <li><b>A bad URL is bad for everyone.</b> Any URL proven wrong is remembered, and at the end every card citing it
+      is rechecked even if it was never picked as worth checking.</li>
+      <li><b>Mercy rules.</b> A page that will not load, because of a paywall or a block, is kept and flagged rather
+      than punished. A search that failed because the service was down keeps the card and flags it. A card is only ever
+      deleted after a judge said no <em>and</em> a hunt found nothing.</li>
+    </ul>
+
+    <div class="note orange">
+      <span class="tag">The honesty check built into this step</span>
+      <p style="margin:8px 0 0">A run where the search service died would report zero cards cut and zero bad URLs, which
+      looks identical to a perfectly clean article. So the step records what fraction of claims it actually judged and
+      stamps the result <b>trustworthy: true or false</b>. On the five real articles that number ranged from
+      <b>98%</b> down to <b>10%</b>, and only one run earned the trustworthy stamp.</p>
+    </div>
+
+    <div class="scroll">
+    <table>
+      <tr><th>Article</th><th>Claims to check</th><th>Actually judged</th><th>Never checked</th><th>Percent</th><th>Verdict</th></tr>
+      <tr><td>strategic-interview-questions-paired-strong</td><td>65</td><td>64</td><td>0</td><td><span class="n">98%</span></td><td><span class="v covered">trustworthy</span></td></tr>
+      <tr><td>running-hiring-hackathon-that-screens</td><td>415</td><td>266</td><td>138</td><td><span class="n">64%</span></td><td><span class="v partial">not yet</span></td></tr>
+      <tr><td>the-real-cost-recruitment-2026</td><td>226</td><td>133</td><td>93</td><td><span class="n">59%</span></td><td><span class="v partial">not yet</span></td></tr>
+      <tr><td>the-type-d-personality-label</td><td>254</td><td>27</td><td>139</td><td><span class="n">11%</span></td><td><span class="v no">not yet</span></td></tr>
+      <tr><td>video-interview-software-that-actually</td><td>196</td><td>20</td><td>173</td><td><span class="n">10%</span></td><td><span class="v no">not yet</span></td></tr>
+    </table>
+    </div>
+    <p class="muted" style="font-size:14.5px">This is the single most important thing on the sources review page. A low
+    percentage does not mean the article is wrong. It means the check did not finish, usually because it hit the
+    250-search cap or ran out of search credit, and those claims are still carrying their original unverified link.</p>
+
+    <h3>Step 4: what freeze will and will not stop</h3>
+    <div class="agents">
+      <div class="agent asker">
+        <div class="cap">&#128721;</div>
+        <h3>Hard flags</h3>
+        <div class="role">The plan is not frozen. Fix and rerun.</div>
+        <ul style="font-size:14.5px; padding-left:18px; color:var(--muted); margin:0">
+          <li>No sections at all</li>
+          <li>A section with zero sub-topics</li>
+          <li>A sub-topic with zero evidence</li>
+          <li>Missing headline, primary keyword or archetype</li>
+          <li>Word band missing or zero</li>
+        </ul>
+      </div>
+      <div class="agent answ">
+        <div class="cap">&#9888;</div>
+        <h3>Soft notes</h3>
+        <div class="role">Recorded, never blocking. You decide.</div>
+        <ul style="font-size:14.5px; padding-left:18px; color:var(--muted); margin:0">
+          <li>A promise nothing in the article serves, listed as a "HOLE"</li>
+          <li>Fewer than three sections</li>
+          <li>More than 15 cards cut by source verification</li>
+          <li>Cards kept with sources that would not load</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted" style="font-size:14.5px">A real example, from
+    <span class="file">strategic-interview-questions-paired-strong</span>: no hard flags, but three soft notes naming
+    People-Also-Ask questions nothing covered, plus "source verification cut 242 cards". The run continued. Those notes
+    are what you read on the review page.</p>
+  </div>
+</section>
+
+<section id="architect" style="background:var(--cream);">
+  <div class="wrap">
+    <h2><span class="num">06</span>The Architect, in detail</h2>
+    <p class="sub">The Planner leaves an unordered, unmerged pile of vetted material. The Architect turns it into an
+    actual article design. This is the step that decides what the reader experiences.</p>
+
+    <h3>The box system</h3>
+    <p>Handing an AI a pile of research and asking for a structure invites it to invent sections that sound good and are
+    not backed by anything. So the material is numbered first.</p>
+
+    <div class="ba">
+      <div class="box"><div class="n">Every surviving sub-topic</div><small>becomes box #1 &hellip; #N, with its cards
+      inside, still grouped under the section it came from</small></div>
+      <div class="arr">&rarr;</div>
+      <div class="box after"><div class="n">The AI answers with<br>headlines + box numbers</div><small>so it can merge,
+      split, reorder and rename anything, and cannot invent material</small></div>
+    </div>
+
+    <p>Code then validates every box number returned, warns when two sections claim the same box, audits which boxes
+    were never used, and rechecks which promises the article still covers after the redesign. The order the AI is asked
+    to work in matters and is spelled out in the prompt: <b>spine first, then each section's job, then its headline,
+    then its boxes.</b> The reason is that a headline written before the job exists is a guess you then justify
+    backwards.</p>
+
+    <div class="note">
+      <span class="tag">The main rule in every structure prompt</span>
+      <p style="margin:8px 0 0">"STAY INSIDE OUR WORLD. A box can be well evidenced, well written and genuinely
+      interesting and still belong to a different field. Those boxes are benched, whatever they match. <b>This is the
+      last step that can catch one: after you, it becomes a section and gets written.</b>"</p>
+    </div>
+
+    <h3>Four roads, by article shape</h3>
+    <div class="scroll">
+    <table>
+      <tr><th>Archetype</th><th>What runs</th><th>The prompt</th></tr>
+      <tr><td>answer-bait &middot; how-to &middot; glossary &middot; data report &middot; common spine</td>
+        <td>One structure call.</td><td><span class="file">structure-simple.md</span></td></tr>
+      <tr><td>listicle</td>
+        <td>First detect the list items, then structure. Each item gets its own section. Also decides the
+        <b>per-item contract</b>: the labelled parts every single item must end with, taken from what the article's
+        angle actually promised.</td>
+        <td><span class="file">detect-items.md</span> then <span class="file">structure-listicle.md</span></td></tr>
+      <tr><td>comparison &middot; rankings</td>
+        <td>Detect the options, choose 4 to 6 yardsticks, drop any option the material cannot cover on at least 60% of
+        them, then structure.</td>
+        <td><span class="file">detect-entities.md</span> &rarr; <span class="file">find-yardsticks.md</span> &rarr;
+        <span class="file">filter-tools.md</span> &rarr; <span class="file">structure-comparison.md</span></td></tr>
+      <tr><td>template resource</td>
+        <td>One structure call that also decides what the downloadable artifact is and which boxes go inside it rather
+        than on the page.</td><td><span class="file">structure-template.md</span></td></tr>
+    </table>
+    </div>
+
+    <div class="note orange">
+      <span class="tag">The fairness rule, in the comparison prompt</span>
+      <p style="margin:8px 0 0">If the publishing company is one of the options being compared, it gets a section like
+      any other and must appear in <b>every</b> table and ranked list the others appear in, judged on the same
+      yardsticks. The prompt states the reason plainly: "a grid that scores every rival but not the publisher reads as
+      though the publisher has something to hide, and costs the article its whole credibility." It may score below a
+      rival, and the prompt says to say so when the evidence says so. If the company is not one of the options, the rule
+      does not apply and it must not be inserted.</p>
+    </div>
+
+    <h3>Word budgets: importance, not volume</h3>
+    <p>The obvious way to split length is by how much evidence each section holds. That is exactly what the prompt
+    forbids.</p>
+    <div class="quote">"Judge by how much the section matters to the argument and how much a reader needs from it,
+    <b>NOT by how many evidence cards it happens to hold.</b> A section with few cards can still be the heart of the
+    piece; a section with many cards can still deserve a short, tight treatment."</div>
+    <p>The base is the midpoint of the word band rather than the ceiling, because distributing the ceiling leaves no
+    room to trim. The AI returns percentage shares with a one-line reason each; code normalises them so they total 100
+    and does the multiplication. There is a per-section buffer setting for the fact that editors cut more than writers
+    add, currently set to zero and tunable in one place.</p>
+
+    <div class="scroll">
+    <table>
+      <tr><th>Article</th><th>Word band</th><th>Budget distributed</th><th>Sections</th><th>Draft came out at</th></tr>
+      <tr><td>the-type-d-personality-label</td><td>2,400 to 3,200</td><td>2,800</td><td>6</td><td><span class="n">3,990</span></td></tr>
+      <tr><td>running-hiring-hackathon-that-screens</td><td>2,800 to 3,800</td><td>3,300</td><td>28</td><td><span class="n">4,802</span></td></tr>
+      <tr><td>the-real-cost-recruitment-2026</td><td>3,000 to 4,000</td><td>3,500</td><td>14</td><td><span class="n">5,052</span></td></tr>
+      <tr><td>video-interview-software-that-actually</td><td>3,500 to 5,000</td><td>4,250</td><td>17</td><td><span class="n">6,523</span></td></tr>
+      <tr><td>strategic-interview-questions-paired-strong</td><td>5,500 to 7,500</td><td>6,500</td><td>26</td><td><span class="n">8,207</span></td></tr>
+    </table>
+    </div>
+    <div class="note red">
+      <span class="tag r">Read this table honestly</span>
+      <p style="margin:8px 0 0">Every one of the five drafts came out <b>above</b> its word band, by 25% to 45%. The
+      writers are told the target is not a quota and never to pad, and the intro, takeaways, FAQ and close are written
+      on top of the body budget rather than inside it. But nothing currently measures the finished length against the
+      band and pushes back. That measurement step is designed and not yet built, and it is listed in section 10.</p>
+    </div>
+
+    <h3>Why section keywords are gated before they are bought</h3>
+    <p>Most sections should not target a search phrase. An article has one main search target, its H1, and a handful of
+    sections that answer a real search of their own. The rest exist to carry the argument. Giving those a keyword
+    produces a forced heading and wastes a paid lookup.</p>
+    <div class="quote">"Expect roughly a third to a half of the sections to be YES. <b>If you are saying yes to nearly
+    all of them, you are being too generous</b>, go back and cut to the ones a stranger would genuinely search for."</div>
+
+    <p>Three details in the hunt that came from real failures:</p>
+    <ul>
+      <li><b>Seeds are read from the evidence, not the heading.</b> "A section whose heading says pricing but whose
+      evidence is all commission percentages is a section about commission rates. Seed it that way."</li>
+      <li><b>Seeds must be 2 or 3 words.</b> The keyword index matches on the phrase itself, so a five-word seed
+      returns nothing and the section ends up with no keyword at all. The prompt gives the example: write "hackathon ai
+      policy", not "AI policy for a hiring hackathon".</li>
+      <li><b>Returning nothing is an explicitly good answer.</b> Both the gate and the pick say so in capitals. Fit
+      beats volume, because a bigger number for a phrase the section does not answer means the page ranks and the
+      reader bounces.</li>
+    </ul>
+
+    <h3>Headings: the evidence wins</h3>
+    <p>Each heading is written by its own AI call, in parallel, with that section's full evidence in view. The rule that
+    does the work:</p>
+    <div class="quote">"Its job was written before the research came back. The evidence is what it really holds now.
+    <b>Where the two disagree, the evidence wins</b>, a heading that promises what the section cannot deliver is worse
+    than a plain one."</div>
+    <p>The prompt then gives worked before-and-afters rather than adjectives:</p>
+    <div class="scroll">
+    <table>
+      <tr><th>Weak</th><th>Strong</th></tr>
+      <tr><td class="muted">Interview Question Considerations</td><td><b>Questions to Ask a Candidate About Failure</b></td></tr>
+      <tr><td class="muted">Understanding Cost Per Hire</td><td><b>What a Bad Hire Actually Costs You</b></td></tr>
+    </table>
+    </div>
+    <p>Two things are deliberately not done here, and both are recorded as decisions rather than oversights. The
+    primary keyword is never replaced, because research picked it from real search data with a world check and
+    second-guessing that from inside the Architect is a weaker decision overriding a better-informed one. And there is
+    no cross-section sweep for repeated heading shapes, held back until a real run shows monotony.</p>
+  </div>
+</section>
+
+<section id="writer">
+  <div class="wrap">
+    <h2><span class="num">07</span>The Writer, in detail</h2>
+    <p class="sub">Seven steps. The first one writes. The next six each improve the article in exactly one way, and
+    every one of them is followed by code that checks it did not cheat.</p>
+
+    <h3>Why the sections are written separately, and how they still read as one piece</h3>
+    <div class="agents">
+      <div class="agent asker">
+        <div class="cap">&#9997;</div>
+        <h3>What each writer CAN see</h3>
+        <div class="role">Enough to write well and pull in one direction</div>
+        <ul style="font-size:14.5px; padding-left:18px; color:var(--muted); margin:0">
+          <li>The spine, the article's title and its angle</li>
+          <li>Its own section: heading, job, sub-topics, word target</li>
+          <li>Its own evidence cards, in full</li>
+          <li><b>Every other section's brief</b>: what each must deliver and what it covers</li>
+          <li>The brand voice pack and the article's reader persona</li>
+        </ul>
+        <div class="mem yes"><span class="lbl">Why</span><br>Knowing the other briefs stops twelve writers from
+        overlapping or contradicting each other.</div>
+      </div>
+      <div class="agent answ">
+        <div class="cap">&#128683;</div>
+        <h3>What it CANNOT see</h3>
+        <div class="role">Each restriction prevents a specific failure</div>
+        <ul style="font-size:14.5px; padding-left:18px; color:var(--muted); margin:0">
+          <li><b>Any other section's text.</b> So it can never write "as we saw above" about prose that does not exist
+          yet.</li>
+          <li><b>Any card belonging to another section.</b> So it cannot use a fact it was not given.</li>
+          <li><b>The keyword list.</b> Writers are keyword blind by design. Search phrases are woven in later, by an
+          editor who can see the finished sentences.</li>
+          <li><b>The product features file.</b> The body is product free by default. That rule only flips for a section
+          that is genuinely about the brand.</li>
+        </ul>
+        <div class="mem no"><span class="lbl">Then code checks</span><br>Any [c] tag naming a card the writer was not
+        given is dropped and counted.</div>
+      </div>
+    </div>
+
+    <h3>The line the writing prompt draws between facts and craft</h3>
+    <p>This is the rule that lets the article carry worked examples without inventing evidence.</p>
+    <div class="scroll">
+    <table>
+      <tr><th>A FACT &mdash; must come from a card</th><th>CRAFT &mdash; the writer may compose it</th></tr>
+      <tr>
+        <td>A statistic, a study result, a named outcome, a price, a real company's result, a quote.
+        <br><br><b>Never invented, not even inside an example.</b></td>
+        <td>A worked example, a sample answer, an illustrative walk-through, because it is guidance rather than a claim
+        about the real world.
+        <br><br><b>With zero invented specifics:</b> no made-up metric, no named company result, no fake study.</td>
+      </tr>
+    </table>
+    </div>
+
+    <p>Two more fact rules that shape how the article reads:</p>
+    <ul>
+      <li><b>Prefer the concrete version.</b> "Do not write 'bad hires are costly' when a card gives 'a bad hire costs
+      30% of first-year salary.'" A specific number turns an assertion into proof.</li>
+      <li><b>Name a source only when it lends authority.</b> Research bodies, government data, peer-reviewed studies and
+      major industry surveys get named in the sentence. A blog or a vendor marketing page gets used with its tag but is
+      not named, because the source link carries it. The exception is a comparison article, where naming vendors is the
+      whole point, as long as they are the subject and not the authority.</li>
+    </ul>
+
+    <h4>The eleven writing rules, in short</h4>
+    <div class="scroll">
+    <table>
+      <tr><th>Rule</th><th>What it means in practice</th></tr>
+      <tr><td><b>Open with the point</b></td><td>The first sentence delivers the finding, the number or the verdict. A
+        reader who stops there still leaves with the section's core.</td></tr>
+      <tr><td><b>Every statistic earns its "so what"</b></td><td>A number alone is trivia. Attach what it means for the
+        reader's decision or money in the same breath.</td></tr>
+      <tr><td><b>Never repeat a claim in two consecutive sentences</b></td><td>The editor later only checks repetition
+        <em>between</em> sections. Repetition inside a paragraph is the writer's to prevent and nobody else catches it.</td></tr>
+      <tr><td><b>No vague quantities or times</b></td><td>"Recently" hides a date, "many companies" hides a share. If a
+        card holds the specific, the vague word is banned. If no card holds it, drop the claim.</td></tr>
+      <tr><td><b>One idea per sentence</b></td><td>When you catch yourself joining two points with "which" or "while",
+        split it. Most sentences under 20 words.</td></tr>
+      <tr><td><b>Say it as a verb, not a noun</b></td><td>"Evaluate candidates", not "conduct an evaluation of
+        candidates". Turning a verb into a noun doubles the words and drains the action out.</td></tr>
+      <tr><td><b>Explain a term the first time or drop it</b></td><td>If a phrase would stop a competent reader from
+        outside the field, give its meaning in the same sentence. If you cannot explain it in a short clause, the
+        sentence does not need it.</td></tr>
+      <tr><td><b>Cut the qualifier stack</b></td><td>"A structured, behaviourally anchored, weighted rubric" is three
+        qualifiers on one noun. The reader cannot hold three, so all three land as none.</td></tr>
+      <tr><td><b>Write the plain word</b></td><td>Use, not leverage. Help, not facilitate. Start, not commence.</td></tr>
+      <tr><td><b>Vary the sentence shapes</b></td><td>Two long sentences earn a short one. Never three in a row sharing
+        the same construction.</td></tr>
+      <tr><td><b>Be concise</b></td><td>No "in this section we will", no restating the heading, no summarising at the
+        end what the reader just read.</td></tr>
+    </table>
+    </div>
+
+    <h3>Blend: an editor with exactly five permitted moves</h3>
+    <p>The editor is the one step that sees the whole article as prose. Everything it may do is enumerated, and it must
+    report every edit it makes.</p>
+    <div class="subflow">
+      <span class="schip"><span class="n">1</span> add a transition</span>
+      <span class="schip"><span class="n">2</span> cut a repetition</span>
+      <span class="schip"><span class="n">3</span> shorten a second definition</span>
+      <span class="schip"><span class="n">4</span> fix a broken back-reference</span>
+      <span class="schip"><span class="n">5</span> weave in a keyword</span>
+    </div>
+    <p>The keyword move is the interesting one, because it is where search phrases enter an article whose writers never
+    saw them:</p>
+    <div class="quote">"Find sentences that <b>ALREADY express the idea</b>. 'The time it takes to fill a role' becomes
+    'time to fill'. 'What a hire costs you' becomes 'cost per hire'. Same meaning, exact phrase. Never bend a sentence
+    to fit a phrase, never add a sentence to house one, and never repeat one to raise its count. If a swap makes a
+    sentence read worse, do not make it."</div>
+    <p>Keywords that find no honest home are reported as skipped, with a reason, rather than forced in. The editor may
+    not touch a heading, may not reorder sections, may not add a fact, and may not touch a source tag. Code audits the
+    tags afterwards either way.</p>
+
+    <h3>Wrapper: the intro rule and the FAQ test</h3>
+    <p>The intro is the only place in the pipeline where specific sentence shapes are banned by name, because it is the
+    one place an AI reliably reaches for them.</p>
+    <div class="note red">
+      <span class="tag r">Banned openers, quoted from the prompt</span>
+      <p style="margin:8px 0 6px">"This article breaks down / covers / explores / explains / walks through&hellip;" &middot;
+      "In this article we will&hellip;" &middot; "This guide will show you&hellip;" &middot; "Below we look at&hellip;" &middot;
+      "Here's everything you need to know about&hellip;" &middot; "Let's dive into&hellip;"</p>
+      <p style="margin:0"><b>Wrong:</b> "This article breaks down hard versus soft costs by role and industry."<br>
+      <b>Right:</b> "Two thirds of what a hire costs never appears on an invoice."</p>
+    </div>
+
+    <p>The FAQ is capped at exactly five, and each question has to clear a five-part test, so the model cannot pad to
+    the number:</p>
+    <div class="scroll">
+    <table>
+      <tr><th>Test</th><th>What it catches</th></tr>
+      <tr><td><b>a.</b> Not already answered under a heading</td><td>A question the reader just read the answer to,
+        wasting a slot.</td></tr>
+      <tr><td><b>b.</b> Answerable from facts already in the body</td><td>The wrapper has no sources. Pulling facts from
+        two sections into a new answer is right. Restating one section's paragraph is not.</td></tr>
+      <tr><td><b>c.</b> Specific enough to have a real answer</td><td>"What is X?" when the whole article is about X.</td></tr>
+      <tr><td><b>d.</b> Something a person would type into a search box</td><td>Phrasing invented to sound thorough.</td></tr>
+      <tr><td><b>e.</b> No two of the five share an answer</td><td>The same question in two costumes.</td></tr>
+    </table>
+    </div>
+    <p>If fewer than five pass, it returns the ones that do and explains why the rest failed. The prompt says it
+    directly: "five real questions is the target, never five questions padded out to reach the number."</p>
+
+    <h3>Slop: the AI proposes, code decides whether to accept it</h3>
+    <p>This is the clearest example of the code-and-AI split in the whole engine. Per block of text:</p>
+    <div class="subflow">
+      <span class="schip"><span class="n">1</span> AI rewrites the block</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">2</span> code compares the numbers before and after</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">3</span> code compares the source tags</span><span class="arrow">&rsaquo;</span>
+      <span class="schip"><span class="n">4</span> any mismatch, the original text is kept</span>
+    </div>
+    <p>The ruleset it works from is the full <span class="file">avoid-ai-writing</span> rulebook carried over word for
+    word, plus this pipeline's own overriding rules, in a single 402-line file. It sorts everything into three
+    priorities: P0 fix always, P1 fix before publishing, P2 only where the fix clearly reads better. Words are sorted
+    into three tiers too, so "delve" and "robust" are replaced on sight while common words are only flagged when they
+    reach a noticeable density.</p>
+
+    <h4>What it actually did, on the five real articles</h4>
+    <div class="scroll">
+    <table>
+      <tr><th>Article</th><th>Em dashes before</th><th>After</th><th>Blocks changed</th></tr>
+      <tr><td>the-type-d-personality-label</td><td>29</td><td><span class="v covered">0</span></td><td>9</td></tr>
+      <tr><td>running-hiring-hackathon-that-screens</td><td>26</td><td><span class="v covered">0</span></td><td>16</td></tr>
+      <tr><td>the-real-cost-recruitment-2026</td><td>53</td><td><span class="v covered">1</span></td><td>20</td></tr>
+      <tr><td>strategic-interview-questions-paired-strong</td><td>60</td><td><span class="v partial">12</span></td><td>30</td></tr>
+      <tr><td>video-interview-software-that-actually</td><td>85</td><td><span class="v no">39</span></td><td>21</td></tr>
+    </table>
+    </div>
+    <p class="muted" style="font-size:14.5px">The last two rows are the honest ones. On the longest articles the pass
+    leaves work behind. That is visible on the slop review page, where every change is shown red for removed and green
+    for what replaced it, and every block the guard rejected is listed too.</p>
+
+    <h3>Links: three pools, each with a different bar</h3>
+    <div class="scroll">
+    <table>
+      <tr><th>Pool</th><th>Where the candidates come from</th><th>The bar</th><th>Target</th></tr>
+      <tr>
+        <td><b>Internal</b></td>
+        <td>Own-brand URLs already cited by this article's evidence, plus the internal links research matched to this
+        topic, around 30 per article.</td>
+        <td>The reader who clicks must land on a genuinely deeper treatment of that exact thing. The anchor must exist
+        verbatim in the body already, 2 to 6 words, never lifted from a heading. Anchors that do not match character
+        for character are thrown away by code.</td>
+        <td>3 to 5</td>
+      </tr>
+      <tr>
+        <td><b>Read more</b></td>
+        <td>The top five pages on the whole site by meaning similarity, matched against the article's fingerprint. Each
+        candidate is shown with its <b>real opening text</b>, so the judge reads the page's actual depth rather than its
+        title.</td>
+        <td>Much stronger: the target page must build on what the reader just learned, not merely relate to it. This is
+        the one place a new line may be added to the article.</td>
+        <td>0 is normal, 2 is the maximum</td>
+      </tr>
+      <tr>
+        <td><b>External</b></td>
+        <td>The article's own verified citations. Code removes competitor domains and our own domain first. Comparison
+        articles keep competitor citations, because naming them is the point.</td>
+        <td>Judged against each other, not one at a time. Primary sources beat write-ups about them. A page that merely
+        repeats another source's number loses to the source itself. One per domain, two at the absolute most.</td>
+        <td>up to 10</td>
+      </tr>
+    </table>
+    </div>
+
+    <div class="note orange">
+      <span class="tag">The integrity check</span>
+      <p style="margin:8px 0 0">After all three pools are laid in, code undoes every change the AI declared it made. The
+      result must equal the article exactly as it was before the links step. Anything undeclared means that block is
+      reverted and the failure is logged. On all five real articles the check came back clean, across 8 to 30 declared
+      insertions each.</p>
+    </div>
+
+    <div class="scroll">
+    <table>
+      <tr><th>Article</th><th>Internal placed</th><th>External kept</th><th>Competitor URLs blocked</th><th>Dead links dropped</th><th>Integrity</th></tr>
+      <tr><td>the-real-cost-recruitment-2026</td><td>6</td><td>4</td><td>0</td><td>0</td><td><span class="v covered">clean</span></td></tr>
+      <tr><td>strategic-interview-questions-paired-strong</td><td>5</td><td>4</td><td>0</td><td>0</td><td><span class="v covered">clean</span></td></tr>
+      <tr><td>video-interview-software-that-actually</td><td>4</td><td>3</td><td>0</td><td>0</td><td><span class="v covered">clean</span></td></tr>
+      <tr><td>running-hiring-hackathon-that-screens</td><td>3</td><td>10</td><td>7</td><td>0</td><td><span class="v covered">clean</span></td></tr>
+      <tr><td>the-type-d-personality-label</td><td>3</td><td>7</td><td>1</td><td>2</td><td><span class="v covered">clean</span></td></tr>
+    </table>
+    </div>
+    <p class="muted" style="font-size:14.5px">Every link is also checked for a real response before it ships, which is
+    where the two dead links in the last row went.</p>
+
+    <div class="note">
+      <span class="tag">One detail that shows how carefully the order was chosen</span>
+      <p style="margin:8px 0 0">The read-more line is added <b>after</b> the style-cleaning pass, so nothing downstream
+      will fix it. The prompt therefore carries the house style rules itself: no em dashes, no "dive into", no "check
+      out", no exclamation mark. It tells the model directly that the line "ships exactly as you write it."</p>
+    </div>
+  </div>
+</section>
+
+<section id="prompts">
+  <div class="wrap">
+    <h2><span class="num">08</span>Every prompt in the engine</h2>
+    <p class="sub">Thirty-three prompts plus one shared ruleset, grouped by the runner that uses them. Every prompt
+    lives in its own file, so it can be read, compared and changed without touching a line of code. Click through on
+    any of them to read the whole thing.</p>
+
+    <div class="note">
+      <span class="tag">How to read a prompt file</span>
+      <ul style="margin:8px 0 0">
+        <li>The <span class="file">{{DOUBLE_BRACES}}</span> are blanks the code fills in before the call: the article's
+        title, its angle, the evidence, the world lines.</li>
+        <li>Almost every prompt ends with "Return ONLY this JSON, nothing else" and shows the exact shape expected. Code
+        then validates it and asks again once if it cannot parse it.</li>
+        <li>The prompts are where the thinking lives. If output is wrong, the fix is almost always in a prompt file, not
+        in the Python.</li>
+      </ul>
+    </div>
+
+    <h3>Routing &middot; 1 prompt</h3>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">route-archetype.md</span><span class="pwho">used by fmt_router.py &middot; 61 lines</span></div>
+      <p class="pdoes">Decides which of the eight article shapes this piece is, which then decides which structure
+      prompt runs and which shape rules apply.</p>
+      <ul class="pint">
+        <li>Carries all eight archetype definitions and a 26-row mapping table from our queue's format labels, so the
+        whole routing brain sits in the prompt rather than in code.</li>
+        <li>It is given the pages currently winning on Google for this keyword, and told to weigh the winners against
+        the queue label. <b>No single input outranks the others by rule.</b></li>
+        <li>One named care: if a "news article" is really delivering numbers a reader would cite, it becomes a data
+        report, not editorial. Numbers that are merely incidental stay editorial.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/route-archetype.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <h3>The Planner &middot; 9 prompts</h3>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">extract-winners.md</span><span class="pwho">gather &middot; 16 lines</span></div>
+      <p class="pdoes">Pulls three lists out of the winners study, which arrives as prose: the gaps no competitor
+      covers, the topics they all cover, and the warnings about where competitors drift off-intent.</p>
+      <ul class="pint">
+        <li>Every item must be lifted <b>verbatim</b>. The prompt says do not rewrite, summarise or invent.</li>
+        <li>If a list is genuinely absent it returns empty rather than filling it, because a fabricated gap becomes a
+        fake coverage hole that drags unrelated facts into the article.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/extract-winners.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">extract-word-band.md</span><span class="pwho">gather &middot; 12 lines</span></div>
+      <p class="pdoes">Reads the target length range out of the research brief's prose.</p>
+      <ul class="pint">
+        <li>The shortest prompt in the engine, and it exists only because the band is written as English rather than
+        stored as a field.</li>
+        <li>Handles the one-number case by multiplying by 1.2, and returns zeros rather than guessing if the line is
+        genuinely missing. A regex sits behind it as a crash net, and the code records which of the two produced the
+        answer.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/extract-word-band.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">vet-lists.md</span><span class="pwho">gather &middot; 34 lines</span></div>
+      <p class="pdoes">Throws away the Google "People Also Ask" questions and related searches that belong to a
+      different field, before they become fake gaps in the article.</p>
+      <ul class="pint">
+        <li>The world test comes first, and the prompt explains the mechanism: "Google returns these lists for the words
+        in a query, not for the audience behind it."</li>
+        <li>It draws a careful distinction most filters miss. <b>Broader is fine, a different world is not.</b> For a
+        Type D personality article, "what are type A, B, C, D personalities" is kept because it still serves this
+        reader.</li>
+        <li>Kept entries must come back word for word, so code can match them against the originals. The code also
+        refuses to let a list be wiped to zero.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/vet-lists.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">tag-h3s.md</span><span class="pwho">select &middot; 71 lines</span></div>
+      <p class="pdoes">The most consequential prompt in the Planner. For every sub-topic of a candidate section, it
+      decides what that sub-topic contributes to. Untagged means dropped.</p>
+      <ul class="pint">
+        <li><b>Every tag must name its proof.</b> The tagger returns the card ids whose text actually contains the thing
+        the tag claims. No card, no tag.</li>
+        <li>The world test runs before any tagging, and the prompt tells it to read each card's <b>source</b>, not only
+        its words, because a university prize-contest page or a clinical use of the same term will otherwise match.</li>
+        <li>It names its own two loosest tags and tells the model to distrust them: "common-h2 and related are topic
+        matches, not judgments about worth. Ask whether a reader who came for the SPINE would want this."</li>
+        <li>A calibration rule catches word-matching: "Most H3s honestly earn 1 to 3 tags. If you are about to give one
+        more than four, you are matching topic words rather than judging."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/tag-h3s.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">place-orphans.md</span><span class="pwho">select &middot; 27 lines</span></div>
+      <p class="pdoes">Files every good sub-topic whose parent section was cut into the best surviving section, so
+      nothing valuable is lost to a weak neighbour.</p>
+      <ul class="pint">
+        <li>Nothing is dropped here at all. Even an orphan from the wrong world has to be placed somewhere, and the
+        prompt asks it to say so in a note so a human can see it.</li>
+        <li>Judged by fit against the spine, not by shared words, with the orphan's own tags used to break a tie between
+        two plausible homes.</li>
+        <li>Code has a fallback if the call fails: place it with the survivor sharing the most tag targets.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/place-orphans.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">verify-worthy.md</span><span class="pwho">verify-sources &middot; 23 lines</span></div>
+      <p class="pdoes">Decides which numeric cards genuinely need a verified source, so the expensive checking only
+      runs where it matters.</p>
+      <ul class="pint">
+        <li>Two things get marked even with no number at all: a claim attributing a finding to a named study or
+        organisation, and <b>a claim characterising a named third-party product</b>, because publishing that unchecked
+        is a public claim about someone else's business.</li>
+        <li>Five exclusions keep the cost down: years used as dates, step numbers, list counts, generic durations, and
+        numbers that are part of the article's own structure.</li>
+        <li>Runs in batches, and a failed batch keeps its cards unverified rather than deleting them unjudged.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/verify-worthy.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">source-judge.md</span><span class="pwho">verify-sources &middot; 19 lines</span></div>
+      <p class="pdoes">Reads a downloaded page and answers one question: does this page support this claim?</p>
+      <ul class="pint">
+        <li>The subject rule is the whole prompt: "Answer YES only if this page states this fact <b>ABOUT THE SAME
+        SUBJECT</b>. A page that states the same number about a different subject, or about the market in general, is
+        NOT support."</li>
+        <li>It is handed both the gloss and the verbatim, and told the first line is what names who the claim is about.</li>
+        <li>If the page credits someone else, it must say so, because the original is the better source. That note is
+        what lets the hunt upgrade a citation rather than just accept it.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/source-judge.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">source-queries.md</span><span class="pwho">verify-sources &middot; 15 lines</span></div>
+      <p class="pdoes">Plans the web searches that will find the real published source for one claim.</p>
+      <ul class="pint">
+        <li>"<b>The SUBJECT matters as much as the number.</b> If the claim is about a named company, product, study or
+        organisation, that name belongs in the query." Without this, searching a bare figure finds whoever else quoted
+        it.</li>
+        <li>Deliberately varies the phrasings, the exact figure, the subject plus the metric, the publisher's name, so
+        one dead end cannot sink the claim.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/source-queries.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">search-urls.md</span><span class="pwho">verify-sources and enrich &middot; 12 lines</span></div>
+      <p class="pdoes">The free fallback. When the paid search service has no credit, one Claude call with web search
+      runs the queries and returns result URLs.</p>
+      <ul class="pint">
+        <li>"Only REAL URLs that actually appeared in results, <b>never constructed or guessed</b>." Without that line a
+        model will happily assemble a plausible-looking address.</li>
+        <li>The only prompt shared between two different runners.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/search-urls.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <h3>The Architect &middot; 14 prompts</h3>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">structure-simple.md</span><span class="pwho">shape &middot; 72 lines</span></div>
+      <p class="pdoes">The main design prompt, used for explainers, how-to guides, glossaries, data reports and plain
+      editorial. It designs the article's whole body.</p>
+      <ul class="pint">
+        <li><b>The order is enforced, and it matters:</b> spine first, then each section's job, then its headline, then
+        its boxes. A headline written before the job exists is a guess you justify backwards.</li>
+        <li>"NEVER pad a section with material that does not belong just to fill it out. If a section cannot be built
+        from material that genuinely fits, <b>leave its boxes empty</b>."</li>
+        <li>Benching is not silent. Any box left out that carried a promise or held hard numbers needs a one-line
+        reason.</li>
+        <li>Research requests must target missing <b>facts</b>, never questions about how to score, rank or weigh
+        things, because "that judgment is yours, not the web's".</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/structure-simple.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">structure-listicle.md</span><span class="pwho">shape &middot; 91 lines</span></div>
+      <p class="pdoes">The same design job for a listicle, where each list item earns its own section, plus one thing no
+      other structure prompt does: it sets the per-item contract.</p>
+      <ul class="pint">
+        <li>The per-item contract is what separates a useful listicle from a list. If the angle promises something that
+        must come back on every item, a worked example, a price, a strong-and-weak answer pair, those parts are named
+        and become a hard requirement that code verifies later.</li>
+        <li>"Take the fields from what the ANGLE actually promises, in the angle's own words. Do not invent a richer
+        contract than the article promised, and do not quietly drop part of what it did promise."</li>
+        <li>Two to four fields, and each must be producible for <b>every</b> item: "a field only half the items could
+        fill is not a contract, it is a wish."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/structure-listicle.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">structure-comparison.md</span><span class="pwho">shape &middot; 88 lines</span></div>
+      <p class="pdoes">The design prompt for "best X", "X vs Y" and "alternatives to X" articles, where each option
+      gets its own section measured on shared yardsticks.</p>
+      <ul class="pint">
+        <li>Carries the fairness rule in full: if the publisher is one of the options it appears in every table and
+        ranked list the rivals appear in, on the same scale, and may score below a rival. A grid that scores everyone
+        except the publisher "reads as though the publisher has something to hide".</li>
+        <li>The rule is explicitly switched off when the article compares something we do not sell against, so the brand
+        is never inserted where it does not belong.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/structure-comparison.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">structure-template.md</span><span class="pwho">shape &middot; 76 lines</span></div>
+      <p class="pdoes">The design prompt for an article whose real value is a downloadable file: a template, a
+      checklist, a cheat sheet, a toolkit.</p>
+      <ul class="pint">
+        <li>Decides the artifact as well as the page: what kind of file it should be, and which boxes' content goes
+        <b>inside</b> the download rather than on the page around it.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/structure-template.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">detect-items.md</span><span class="pwho">shape, listicles &middot; 32 lines</span></div>
+      <p class="pdoes">Finds the actual list items a listicle presents, before the structure is designed.</p>
+      <ul class="pint">
+        <li>Teaches the right level of granularity with examples: for "strategic interview questions" the items are
+        individual questions, not question categories. "Pick the true grain the article promises."</li>
+        <li>An item survives only if the material holds evidence about <b>that item specifically</b>. A name mentioned
+        in passing inside a general box does not qualify.</li>
+        <li>Merges near-duplicates: "two items a reader would answer the same way are ONE item."</li>
+        <li>Explicitly bans listing research firms and publishers as items, because they are sources, not content.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/detect-items.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">detect-entities.md</span><span class="pwho">shape, comparisons &middot; 34 lines</span></div>
+      <p class="pdoes">Finds the named options a comparison article is actually choosing between.</p>
+      <ul class="pint">
+        <li>The test is a shortlist: "an option must be something a buyer of THIS article would put on ONE shortlist
+        against the others." A product from an adjacent category is not an option, however often it appears.</li>
+        <li>Gives examples across four unrelated domains, software, agencies, bootcamps, credit cards, so the model
+        learns the shape rather than the subject.</li>
+        <li>Two hard exclusions: never list the tools that fetched the research itself, and never list the studies or
+        publishers the cards cite.</li>
+        <li>Anything mentioned by fewer than three cards is dropped.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/detect-entities.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">find-yardsticks.md</span><span class="pwho">shape, comparisons &middot; 24 lines</span></div>
+      <p class="pdoes">Chooses the four to six axes every option in a comparison gets measured on.</p>
+      <ul class="pint">
+        <li>Two conditions at once: a buyer must genuinely weigh it, <b>and</b> the material must be able to speak to it
+        for these options. A yardstick nothing can be said about is dead weight.</li>
+        <li>Anti-overlap rule stated plainly: "four axes that are all about detection is one axis, not four."</li>
+        <li>Together they must cover what the product can do, how well it fits, what the experience is like, and what it
+        costs.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/find-yardsticks.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">filter-tools.md</span><span class="pwho">shape, comparisons &middot; 33 lines</span></div>
+      <p class="pdoes">Drops options the material cannot honestly cover, so no section is written on nothing.</p>
+      <ul class="pint">
+        <li>Makes the model <b>show its work</b>: list which yardsticks it found real information for, per option, and
+        only then decide. Keep at 60% coverage or better.</li>
+        <li>Carries a self-audit called the rank check: "if any option you DROPPED has more cards than any option you
+        KEPT, you have misread the material, recount that pair."</li>
+        <li>Names the category first, so a component or an integration gets removed before coverage is even counted.</li>
+        <li>"Judge from the cards only; never from your own knowledge of these products."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/filter-tools.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">plan-queries.md</span><span class="pwho">enrich &middot; 20 lines</span></div>
+      <p class="pdoes">Plans the web searches for one sub-topic the structure flagged as missing material.</p>
+      <ul class="pint">
+        <li>The world rule is operational here rather than advisory: <b>put the setting or the audience into the query
+        itself</b>, so the results cannot drift. Otherwise "every card built from them looks plausible and is wrong for
+        this reader."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/plan-queries.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">extract-cards.md</span><span class="pwho">enrich &middot; 25 lines</span></div>
+      <p class="pdoes">Builds new evidence cards from freshly downloaded pages, in the same shape as the research
+      cards so everything downstream treats them identically.</p>
+      <ul class="pint">
+        <li><b>One card summarises one page only.</b> Cross-page summarising is banned outright, because a card blending
+        two sources cannot be traced to either.</li>
+        <li>The sub-topic title stays exactly as written: "you are filling it, not renaming it."</li>
+        <li>"If the pages turned up nothing genuinely useful, return an empty list. <b>Never force weak cards.</b>"</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/extract-cards.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">allocate-words.md</span><span class="pwho">allocate &middot; 26 lines</span></div>
+      <p class="pdoes">Decides what percentage of the article each section deserves.</p>
+      <ul class="pint">
+        <li>The central instruction is a prohibition: judge by importance to the argument, <b>not by how many evidence
+        cards a section happens to hold</b>.</li>
+        <li>"A section with few cards can still be the heart of the piece; a section with many cards can still deserve a
+        short, tight treatment."</li>
+        <li>Nothing below 4%, because "anything that small should not be its own section". Code does the arithmetic so
+        the shares always total 100.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/allocate-words.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">keyword-gate.md</span><span class="pwho">section-keywords &middot; 38 lines</span></div>
+      <p class="pdoes">Decides which sections should target a search keyword at all, before a single paid lookup runs.</p>
+      <ul class="pint">
+        <li>One question, asked per section: "would a person type this section's subject into Google as its own search?"</li>
+        <li>Four yes conditions and five no conditions, including one that catches the most common waste: "its subject is
+        the primary keyword again, just from a different side, the H1 already owns that."</li>
+        <li>Ends with a calibration check: expect a third to a half to be yes. "If you are saying yes to nearly all of
+        them, you are being too generous."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/keyword-gate.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">section-seeds.md</span><span class="pwho">section-keywords &middot; 34 lines</span></div>
+      <p class="pdoes">Writes the two or three short phrases that get looked up for one section.</p>
+      <ul class="pint">
+        <li><b>Read the evidence, not the heading.</b> "A section whose heading says pricing but whose evidence is all
+        commission percentages is a section about commission rates. Seed it that way."</li>
+        <li>The length rule is flagged as the single most important one in the file, with the reason: the keyword index
+        matches on the phrase itself, so a four or five word seed returns nothing and the section ends up with no
+        keyword at all.</li>
+        <li>"Vary them. If your seeds are the same words reordered, you get one set of results, not three."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/section-seeds.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">pick-section-keyword.md</span><span class="pwho">section-keywords &middot; 30 lines</span></div>
+      <p class="pdoes">Chooses one keyword for a section from the real search data, or none.</p>
+      <ul class="pint">
+        <li><b>Fit first, volume second.</b> "A bigger number for a phrase the section does not answer is worth nothing,
+        the page ranks and the reader bounces."</li>
+        <li>"RETURNING NOTHING IS A GOOD ANSWER. If no candidate genuinely names this section, return null and say why.
+        Do not stretch."</li>
+        <li>A phrase from the wrong world is called out as "the most damaging pick available here", whatever its volume.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/pick-section-keyword.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">write-heading.md</span><span class="pwho">headings &middot; 64 lines</span></div>
+      <p class="pdoes">Writes the final published heading for one section, and decides which keyword, if any, it
+      carries.</p>
+      <ul class="pint">
+        <li>Opens with the length rule in a box: aim under 60 characters and <b>count as you write rather than after</b>,
+        with permission to go over only when trimming would cost the specific thing that makes the heading worth
+        reading.</li>
+        <li>A four-step keyword ladder that is allowed to end in nothing: this section's keyword, then the leftover
+        pool, then the primary, then none. "A well-researched keyword that does not fit is still a keyword that does not
+        fit."</li>
+        <li>Names the AI's own default failure: "Overview, Key considerations, Things to know, Best practices,
+        Understanding X say nothing, and they are the default an AI reaches for."</li>
+        <li>One keyword per heading, never two, because "a heading holding two search phrases reads as written for a
+        machine".</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/write-heading.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">write-h1.md</span><span class="pwho">headings &middot; 28 lines</span></div>
+      <p class="pdoes">Writes the article's title, last, having seen every finished section heading.</p>
+      <ul class="pint">
+        <li>It is shown what the article actually delivers, so the rule "it must not promise something the headings do
+        not deliver" is checkable rather than aspirational.</li>
+        <li>If the planned title already carries the primary keyword, it returns it unchanged. No change for the sake of
+        it.</li>
+        <li>"Never invent a keyword. Use only the primary or one of its rewords."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/write-h1.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <h3>The Writer &middot; 9 prompts and 1 ruleset</h3>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">write-body.md</span><span class="pwho">write-body &middot; 111 lines</span></div>
+      <p class="pdoes">The prompt that actually writes the article. One call per section, all running at once.</p>
+      <ul class="pint">
+        <li>Split into <b>FACT RULES</b> and <b>WRITING RULES</b>, because the two failure modes are different: one
+        produces a lie, the other produces boring prose.</li>
+        <li>Draws the fact-versus-craft line explicitly, so a section can carry a worked example without inventing
+        evidence, as long as the example contains zero invented specifics.</li>
+        <li>It is told the other sections are being written in parallel and it can see only their briefs: "Never write
+        'as we saw above' or quote prose that does not exist yet."</li>
+        <li>Names the persona and immediately forbids addressing them: "think about them, but NEVER name or address
+        them."</li>
+        <li>The length line refuses to become a quota: "That is a target, not a quota. If the facts do not justify it,
+        write less. NEVER pad to reach it."</li>
+        <li>Warns the writer about the one thing nothing downstream will catch: "The editor who reads the finished
+        article only checks for repetition BETWEEN sections; repetition inside your own paragraphs is yours to prevent
+        and nobody else will catch it."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/write-body.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">blend.md</span><span class="pwho">blend &middot; 65 lines</span></div>
+      <p class="pdoes">The editor's pass. Makes separately written sections read as one continuous piece, and weaves
+      the search phrases into prose that already says those things.</p>
+      <ul class="pint">
+        <li>Exactly five permitted moves, listed and numbered, and everything else is in a "WHAT YOU MUST NOT DO" block.</li>
+        <li>The keyword move is defined as a <b>word swap inside an existing sentence</b>: never a new sentence, never a
+        new fact, never a repeat to raise a count.</li>
+        <li>"Do NOT rewrite prose that reads fine. This is a seam repair, not a rewrite. <b>Most sentences must come
+        through untouched.</b>"</li>
+        <li>It must report every edit and every keyword it skipped, with a reason, which is what makes the edit trail on
+        the review page possible.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/blend.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">wrapper.md</span><span class="pwho">wrapper &middot; 130 lines</span></div>
+      <p class="pdoes">The longest prompt after the ruleset. Writes the intro, the key takeaways, the five FAQs, the
+      close, and the touch-ups to the two sections the new seams affect.</p>
+      <ul class="pint">
+        <li>Opens with the constraint that makes everything else safe: "you have no sources. Every fact, number, name
+        and claim you use must ALREADY be in the article above."</li>
+        <li>Bans ten specific opening shapes by name and shows a wrong-versus-right example, because this is the single
+        place an AI most reliably writes about the page instead of informing the reader.</li>
+        <li>The five-part FAQ test carefully separates the question from the facts: (a) is about the question, (b) is
+        about the facts you answer it with. It says so in the prompt, because they get conflated.</li>
+        <li>The close is grounded in the company's real feature list and told never to imply the product solves
+        something the article showed to be unsolvable.</li>
+        <li>Ends with a note on brand mentions: "Never insert it to hit a quota, a forced mention costs more trust than
+        it buys."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/wrapper.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">slop.md</span><span class="pwho">slop &middot; 32 lines</span></div>
+      <p class="pdoes">The instruction wrapper for the style cleanup. It is short because the rules live in a separate
+      file that gets pasted into it.</p>
+      <ul class="pint">
+        <li>States the code guards inside the prompt, under the heading "HARD LIMITS, checked by code after you answer;
+        <b>a violation throws your whole block away</b>". Telling the model what will be checked improves compliance.</li>
+        <li>"If fixing a tell would force a fact or number to change, leave that sentence as it is." Style always loses
+        to accuracy.</li>
+        <li>Must return a change list of before, after and which rule, which is exactly what the red-and-green review
+        page renders.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/slop.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">slop-rules.md</span><span class="pwho">the shared ruleset &middot; 402 lines</span></div>
+      <p class="pdoes">Not a prompt, but the rulebook that gets loaded into every slop call. The full
+      <span class="file">avoid-ai-writing</span> ruleset carried over word for word, plus this pipeline's own
+      overriding rules.</p>
+      <ul class="pint">
+        <li>Opens with five rules that override everything below them on conflict: facts untouchable, source tags stay
+        attached, headings never changed, the voice stays, and an em-dash budget of zero.</li>
+        <li>Sorts vocabulary into three tiers. <b>Tier 1</b> words appear 5 to 20 times more often in AI text and are
+        replaced on sight. <b>Tier 2</b> only counts when two appear in the same paragraph. <b>Tier 3</b> only counts at
+        roughly 3% density. That tiering is what stops false positives on ordinary words.</li>
+        <li>Around 45 named patterns beyond vocabulary, including the rule of three, synonym cycling, false ranges,
+        rhetorical question openers, emotional flatline, and unfilled placeholders.</li>
+        <li>Everything carries a severity: P0 credibility killers, P1 obvious AI smell, P2 polish. The prompt only
+        forces P0 and P1.</li>
+        <li><b>This is the one place to tune a style rule.</b> Editing it changes every article from the next run on.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/slop-rules.md" target="_blank">Read the full ruleset &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">inline-links.md</span><span class="pwho">links &middot; 40 lines</span></div>
+      <p class="pdoes">Places 3 to 5 internal links by laying anchors over words already in the text.</p>
+      <ul class="pint">
+        <li>Value first: "a reader who clicks it must land on a page that gives a genuinely deeper or more practical
+        treatment of the exact thing those words talk about. The link is a promise. <b>When in doubt, do not link.</b>"</li>
+        <li>The anchor must be quoted character for character from the body, never from a heading, and the prompt warns
+        that a mismatch is thrown away by code and the link is lost.</li>
+        <li>Spread rules stop clustering: at most two per paragraph, at most one per section unless two genuinely earn
+        it, and no two links may use the same wording.</li>
+        <li>Asks for at least one product page where it fits, and explicitly permits skipping it: "never force the
+        product."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/inline-links.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">read-more.md</span><span class="pwho">links &middot; 46 lines</span></div>
+      <p class="pdoes">Decides whether the article earns a single added line pointing to a page that continues what it
+      started. Usually the answer is no.</p>
+      <ul class="pint">
+        <li>"<b>ZERO is the normal, expected outcome.</b>" One is common when it happens, two is the absolute maximum.</li>
+        <li>Candidates arrive with their real opening text, not just their titles, so "a thin stub does not qualify
+        however good its title sounds".</li>
+        <li>It may lightly smooth the sentences on either side, but must report each adjustment word for word, because
+        code applies and audits them and an unreported change is thrown away.</li>
+        <li>Carries the house style rules itself, because this line is added after the style pass: no em dashes, no
+        "dive into", no "check out", no exclamation mark. "It ships exactly as you write it."</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/read-more.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">external-links.md</span><span class="pwho">links &middot; 38 lines</span></div>
+      <p class="pdoes">Chooses which of the article's many verified citations become visible links and appear in the
+      Sources list.</p>
+      <ul class="pint">
+        <li>"<b>Judge them AGAINST EACH OTHER, not one by one</b>, credibility is relative, and you can see the whole
+        field."</li>
+        <li>Primary sources beat write-ups about them: "a page that merely repeats another source's number loses to the
+        source itself."</li>
+        <li>Claims carrying a load-bearing number are marked with a star in the candidate list, and the sources behind
+        those win ties, because that is where a reader wants a link they can check.</li>
+        <li>One per domain, two at the very most, so no single site dominates the Sources list.</li>
+      </ul>
+      <a class="pl" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/prompts/external-links.md" target="_blank">Read the full prompt &rarr;</a>
+    </div>
+
+    <div class="note orange">
+      <span class="tag">Also worth reading: the 8 format playbooks</span>
+      <p style="margin:8px 0 0">Each archetype has a short file listing the shape that article type must follow. It gets
+      pasted into the structure prompt as the required shape. They are deliberately short, because everything not
+      specific to that format already lives in the common rules.</p>
+      <div class="files" style="margin-top:10px">
+        <a class="file" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/formats/answer-bait-definitional.md" target="_blank">answer-bait-definitional.md</a>
+        <a class="file" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/formats/how-to-guide.md" target="_blank">how-to-guide.md</a>
+        <a class="file" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/formats/listicle.md" target="_blank">listicle.md</a>
+        <a class="file" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/formats/comparison-rankings.md" target="_blank">comparison-rankings.md</a>
+        <a class="file" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/formats/glossary.md" target="_blank">glossary.md</a>
+        <a class="file" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/formats/data-benchmark-report.md" target="_blank">data-benchmark-report.md</a>
+        <a class="file" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/formats/template-resource.md" target="_blank">template-resource.md</a>
+        <a class="file" href="https://github.com/Devanshindian/write-phase-97c578f8/blob/main/formats/common-spine.md" target="_blank">common-spine.md</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="evaluate" style="background:var(--cream);">
+  <div class="wrap">
+    <h2><span class="num">09</span>How to check the output yourself</h2>
+    <p class="sub">Every run builds seven review pages plus a front door, automatically. They are plain HTML files that
+    open in any browser, and they are built only from files the pipeline already wrote, so any of them can be rebuilt
+    for any past article at any time. Nothing on them decides anything.</p>
+
+    <div class="note orange">
+      <span class="tag">Start here</span>
+      <p style="margin:8px 0 0">Open <span class="file">index.html</span> in the article's output folder. It lists the
+      five stages in order, each linking to its page, and it tells you plainly why to read them in that order: "Each
+      one shows a decision the machine made, so you can catch a bad call early instead of finding it in the finished
+      article." A page that has not been built yet is marked rather than hidden.</p>
+    </div>
+
+    <h3>The five stage pages, in reading order</h3>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">1 &nbsp;gather/gather-review.html</span><span class="pwho">What we started with</span></div>
+      <p class="pdoes">Everything research handed over, before any decision was made. Read it to know whether the raw
+      material was any good.</p>
+      <div class="scroll">
+      <table>
+        <tr><th>Panel</th><th>What to look for</th></tr>
+        <tr><td><b>The settings this run used</b></td><td>The archetype it routed to, the word band, the primary
+          keyword. If the archetype is wrong, everything downstream is built on the wrong shape.</td></tr>
+        <tr><td><b>People-Also-Ask questions, kept X of Y</b></td><td>Which Google questions survived the world test and
+          which were thrown out. Read the drops. A question wrongly dropped becomes a topic the article never covers.</td></tr>
+        <tr><td><b>Related searches, kept X of Y</b></td><td>Same, for the related-search list.</td></tr>
+        <tr><td><b>Research depth per section</b></td><td>How many evidence cards sit behind each candidate section. A
+          section with two cards is thin before anyone has judged anything.</td></tr>
+        <tr><td><b>The winners study</b></td><td>The gaps we can own, the topics every competitor covers, and where
+          competitors drift off-intent. This is what the whole selection step is judged against.</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">2 &nbsp;planner/selection-review.html</span><span class="pwho">What made the cut</span></div>
+      <p class="pdoes">Deliberately leads with the losses, not the wins.</p>
+      <div class="scroll">
+      <table>
+        <tr><th>Panel</th><th>What to look for</th></tr>
+        <tr><td><b>Everything we dropped, read this panel first</b></td><td>Every dropped sub-topic with the reason the
+          tagger gave. This is where you catch a genuinely good topic that was cut because the tagger misread it.</td></tr>
+        <tr><td><b>What we kept, thinnest evidence first</b></td><td>Sorted so the weakest survivors are at the top. If
+          a kept section rests on one card, question it now rather than after it is written.</td></tr>
+        <tr><td><b>Close calls per section</b></td><td>Sorted by lowest coverage. A section that survived at 0.46
+          against a 0.45 threshold is a coin flip you may want to overrule.</td></tr>
+        <tr><td><b>Orphans and where they went</b></td><td>Every rescued sub-topic and the section it was filed into,
+          with a note where the fit was poor.</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">3 &nbsp;planner/sources-review.html</span><span class="pwho">Do the numbers check out</span></div>
+      <p class="pdoes">One row per claim that was checked, filterable by verdict. The most important page in the set,
+      because it is the one that tells you whether the article's facts are real.</p>
+      <div class="scroll">
+      <table>
+        <tr><th>Verdict filter</th><th>What it means</th></tr>
+        <tr><td><span class="v covered">VERIFIED</span></td><td>The page it credits does state this fact, about this
+          subject. Nothing to do.</td></tr>
+        <tr><td><span class="v partial">REPAIRED</span></td><td>The original link was wrong. A hunt found a better page
+          and the link was replaced. The row shows the old URL, the new one, and the sentence on the new page that
+          proves it.</td></tr>
+        <tr><td><span class="v no">CUT</span></td><td>No page anywhere supported the claim, so the fact was removed from
+          the article entirely.</td></tr>
+        <tr><td><span class="v partial">UNLOADABLE</span></td><td>The source is behind a paywall or blocked us. Kept,
+          but never actually verified. <b>Worth a manual look before publishing.</b></td></tr>
+        <tr><td><span class="v no">UNCHECKED</span></td><td>The check never reached it, because it hit the search cap or
+          ran out of credit. These claims are shipping on their original, unverified link.</td></tr>
+      </table>
+      </div>
+      <div class="note red" style="margin-top:6px">
+        <span class="tag r">The banner at the top is the thing to read first</span>
+        <p style="margin:8px 0 0">The page states what percentage of claims were actually judged and whether the run is
+        <b>trustworthy</b>. This exists because a run where the search service died reports zero cuts and zero bad URLs,
+        which looks exactly like a perfectly clean article. On the five real articles that number ranged from 98% down
+        to 10%. Only one earned the stamp.</p>
+      </div>
+      <p class="muted" style="font-size:14.5px; margin-top:12px">The page also answers "did anything collapse?" A card
+      is the smallest unit, so a sub-topic that loses all its evidence dies, and a section that loses all its sub-topics
+      dies with it. When nothing collapsed the page says so in words rather than showing an empty box, so you can tell
+      "clean" apart from "not rendered".</p>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">4 &nbsp;architect/blueprint-review.html</span><span class="pwho">The plan for the article</span></div>
+      <p class="pdoes">The article's design before a word is written. This is the cheapest place to catch a bad
+      structure.</p>
+      <div class="scroll">
+      <table>
+        <tr><th>Panel</th><th>What to look for</th></tr>
+        <tr><td><b>The spine</b></td><td>One paragraph: what the article argues, for whom, what the reader can do at the
+          end. If you disagree with this, stop here. Everything below serves it.</td></tr>
+        <tr><td><b>The keyword decision</b></td><td>Which sections were gated yes and no, what was searched for, what
+          was found, and what was picked or refused, including the nulls and the reasons.</td></tr>
+        <tr><td><b>The bench</b></td><td>What the Architect chose not to use, each with a one-line reason. Read this to
+          see what was left on the table.</td></tr>
+        <tr><td><b>The sections, in reading order</b></td><td>Each with its job, its final heading, its word target and
+          its evidence. Check that the heading actually matches the job.</td></tr>
+        <tr><td><b>Research: asked for vs delivered</b></td><td>Where the structure asked for more material, and whether
+          the enrichment found any. A request that came back empty means that section is still thin.</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="pcard">
+      <div class="ph"><span class="pn">5 &nbsp;writer/article.html</span><span class="pwho">The finished piece</span></div>
+      <p class="pdoes">The article exactly as it will publish, with four things layered on top that the published
+      version will not have.</p>
+      <ul class="pint">
+        <li><b>Hover any statistic</b> to see the claim it carries and the source link behind it. This is the fastest
+        fact check available: you never have to leave the article to see where a number came from.</li>
+        <li><b>Hover any highlighted phrase</b> to see what kind of keyword it is: the primary, a reword of it, or a
+        keyword researched for that specific section.</li>
+        <li><b>The keyword panel at the top</b> lists every target phrase, how many times it actually landed, and
+        whether the placement rules were met: in the H1, in the first 100 words, in a heading, in the close. These
+        counts are done by code from the finished text, never reported by the AI about itself.</li>
+        <li><b>"What was done to it"</b>, at the bottom, is the edit trail. It is rebuilt by comparing the saved stages
+        against each other, so it shows what each step actually changed rather than what it claimed to change.</li>
+      </ul>
+      <h4>Reading the keyword panel, with real examples</h4>
+      <div class="scroll">
+      <table>
+        <tr><th>Article</th><th>Primary keyword</th><th>Times used</th><th>In H1</th><th>First 100 words</th><th>In headings</th><th>Read it as</th></tr>
+        <tr><td>the-real-cost-recruitment-2026</td><td>cost per hire</td><td><span class="n">48</span></td><td>yes</td><td>yes</td><td>8</td><td><span class="v covered">healthy</span></td></tr>
+        <tr><td>the-type-d-personality-label</td><td>type d personality</td><td><span class="n">16</span></td><td>yes</td><td>yes</td><td>1</td><td><span class="v covered">healthy</span></td></tr>
+        <tr><td>running-hiring-hackathon-that-screens</td><td>hackathon judging</td><td><span class="n">6</span></td><td>yes</td><td>yes</td><td>0</td><td><span class="v partial">thin, but placed</span></td></tr>
+        <tr><td>strategic-interview-questions-paired-strong</td><td>good questions to ask an interviewee</td><td><span class="n">2</span></td><td>yes</td><td><b>no</b></td><td>0</td><td><span class="v partial">check the intro</span></td></tr>
+        <tr><td>video-interview-software-that-actually</td><td>video interview platform</td><td><span class="n">8</span></td><td><b>no</b></td><td><b>no</b></td><td>1</td><td><span class="v no">investigate</span></td></tr>
+      </table>
+      </div>
+      <p class="muted" style="font-size:14.5px">The last row is exactly what this panel is for. The primary keyword is
+      not in the title and not in the opening, so either the heading step decided it did not fit, which it is allowed to
+      do, or the keyword was a poor pick in the first place. The panel does not tell you which. It tells you where to
+      look.</p>
+    </div>
+
+    <h3>The three extra pages</h3>
+    <div class="scroll">
+    <table>
+      <tr><th>Page</th><th>What it shows</th><th>What to check</th></tr>
+      <tr>
+        <td><span class="file">writer/slop-review.html</span></td>
+        <td>Every change the style cleanup made, grouped by block, <b>red for what was removed and green for what
+        replaced it</b>. Plus the before-and-after tell counts, and every block the code guard rejected.</td>
+        <td>Read a few replacements and judge whether they read better. Then check the rejected list: a block the guard
+        threw away is a block that still carries its tells.</td>
+      </tr>
+      <tr>
+        <td><span class="file">writer/links-review.html</span></td>
+        <td>Every link decision, grouped by pool: internal links laid into the text, read-more pointers, external
+        sources kept, and the notable rejections with their reasons.</td>
+        <td>Click the internal links and ask whether the target really is deeper on that exact thing. Check the external
+        list is primary sources rather than blogs quoting primary sources.</td>
+      </tr>
+      <tr>
+        <td><span class="file">time-and-usage.html</span></td>
+        <td>How long each step took and what it cost, per step and for the article end to end. The numbers are the
+        providers' own figures, not estimates: the search service returns a cost on every response and the model returns
+        a token count on every completion.</td>
+        <td><b>Currently empty for the five pilot articles.</b> The page and its meter are built, but no cost ledger was
+        recorded for those runs, so it will populate from the next run onward.</td>
+      </tr>
+    </table>
+    </div>
+
+    <div class="note">
+      <span class="tag">The four-minute version</span>
+      <ul style="margin:8px 0 0">
+        <li><b>Sources page:</b> is the trustworthy banner green, and how many claims are CUT or UNCHECKED?</li>
+        <li><b>Blueprint page:</b> do you agree with the spine, and does every heading match its job?</li>
+        <li><b>Selection page:</b> scan the drop list for anything that should have survived.</li>
+        <li><b>Article page:</b> does the keyword panel show the primary in the H1 and the first 100 words, and does
+        hovering three random statistics give you three real sources?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="status">
+  <div class="wrap">
+    <h2><span class="num">10</span>What is built, and what is not</h2>
+    <p class="sub">Five articles have run end to end. Here is an honest account of what that covers and what it does
+    not, so nobody assumes a check that is not happening.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="big">17</div><div class="cap">steps, across 3 runners</div></div>
+      <div class="stat"><div class="big">33</div><div class="cap">prompts, plus 1 shared ruleset</div></div>
+      <div class="stat"><div class="big">28</div><div class="cap">Python files</div></div>
+      <div class="stat"><div class="big">5</div><div class="cap">articles run end to end</div></div>
+      <div class="stat"><div class="big">8</div><div class="cap">review pages per article</div></div>
+    </div>
+
+    <div class="agents" style="margin-top:26px">
+      <div class="agent asker">
+        <div class="cap">&#9989;</div>
+        <h3>Built and running</h3>
+        <div class="role">Every one of these has produced real output on five articles</div>
+        <ul style="font-size:14.5px; padding-left:18px; color:var(--muted); margin:0">
+          <li>Format routing to 8 archetypes</li>
+          <li>Sub-topic tagging with card receipts, and the 45% survival rule</li>
+          <li>Source verification with repair, cutting and bad-URL propagation</li>
+          <li>The freeze gate, hard flags and soft notes</li>
+          <li>Free-form structure design from numbered boxes</li>
+          <li>Enrichment research for sections that lack material</li>
+          <li>Word budgets by importance</li>
+          <li>Gated, evidence-seeded section keyword research</li>
+          <li>Per-section headings and the H1</li>
+          <li>Parallel section writing with fact-tag auditing</li>
+          <li>The editor, the wrapper, the 5-FAQ rule</li>
+          <li>The style cleanup with code guards</li>
+          <li>Internal, read-more and external links with an integrity check</li>
+          <li>The mechanical scrub</li>
+          <li>Assembly, keyword counting, and all 8 review pages</li>
+        </ul>
+      </div>
+      <div class="agent answ">
+        <div class="cap">&#128736;</div>
+        <h3>Designed, not yet built</h3>
+        <div class="role">Nothing here runs today. Do not assume these checks are happening.</div>
+        <ul style="font-size:14.5px; padding-left:18px; color:var(--muted); margin:0">
+          <li><b>MEASURE.</b> The countable-facts report: finished length against the word band, sentence and paragraph
+          statistics, citation counts per domain, heading hierarchy, the 40 to 60 word liftable-answer check. This is
+          why the length overrun in section 06 is currently unpoliced.</li>
+          <li><b>REVIEW and EDIT.</b> An AI reviewer fed those facts, sorting findings into critical, high and
+          quick-win, then an editor pass, looping up to three times.</li>
+          <li><b>The GATE.</b> The single publish checklist that has to pass before anything ships, with anything
+          failing three times going to a human.</li>
+          <li><b>Meta title and description.</b> Research does not produce them and the write phase does not yet write
+          them.</li>
+          <li><b>PUBLISH.</b> The WordPress draft, the Bing submission, and stamping the topic queue as written.</li>
+          <li><b>Author box and dates.</b> Publish-time work, and the author identity is still an open decision.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note red">
+      <span class="tag r">Three known weaknesses, stated plainly</span>
+      <ul style="margin:8px 0 0">
+        <li><b>Drafts run long.</b> All five came out 25% to 45% above their word band. Nothing measures this yet, so
+        nothing pushes back.</li>
+        <li><b>Source verification often does not finish.</b> Four of the five runs judged under two thirds of their
+        claims, one as low as 10%, usually from hitting the 250-search cap or running out of search credit. The pages
+        say so rather than hiding it, but those claims ship on unverified links.</li>
+        <li><b>The style pass leaves work behind on long articles.</b> On the two longest drafts it removed 80% and 54%
+        of em dashes rather than all of them. The mechanical scrub afterwards catches dashes it can handle
+        deterministically, but the judgment-based rewrites are incomplete.</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <span class="tag">On which AI model writes the articles</span>
+      <p style="margin:8px 0 0">The default chain is DeepSeek first, then Claude, then Codex. A blind A/B across the
+      five articles, with independent reviewers and a judge, found Claude better on prose and discipline and DeepSeek
+      better on structural compliance, and found that most of the differences were prompt gaps rather than model gaps.
+      Those prompt gaps have since been fixed and the default was deliberately left unchanged. One gap remains open:
+      nothing currently records which model produced which output.</p>
+    </div>
+  </div>
+</section>
+
+<section id="sits" style="background:var(--cream);">
+  <div class="wrap">
+    <h2><span class="num">11</span>Where this sits in the bigger machine</h2>
+    <p class="sub">The write phase is stage 04. It is deliberately narrow: it assembles and verifies, and it never
+    re-researches.</p>
+
+    <div class="chain">
+      <div class="link"><div class="em">&#127760;</div><b>00 Foundation</b><small>catalogue every page and its traffic</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link"><div class="em">&#127917;</div><b>01 Brand context</b><small>how the company writes, what it sells</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link"><div class="em">&#128161;</div><b>02 Asset engine</b><small>find the ideas worth writing</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link"><div class="em">&#128269;</div><b>03 Research</b><small>turn one idea into an evidence bundle</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link pick"><div class="em">&#9997;</div><b>04 Write</b><small>you are here</small></div>
+      <div class="chev">&rsaquo;</div>
+      <div class="link out"><div class="em">&#128228;</div><b>Publish</b><small>not built yet</small></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>What research decides, and write does not</h3>
+        <p>What the article should say. The candidate structure. Which sources exist. The primary keyword, chosen from
+        real search data with a world check. The target length band. The reader persona. The write phase inherits all of
+        it and is deliberately not allowed to overrule the primary keyword.</p>
+      </div>
+      <div class="card">
+        <h3>What write decides, and research does not</h3>
+        <p>Which of the candidate sections survive. The exact wording. Which citations are chosen and which are visible.
+        The internal links. The section keywords, researched against the sections as actually built. Every heading. The
+        title. And the proof that the finished draft matches the plan.</p>
+      </div>
+    </div>
+
+    <div class="note orange">
+      <span class="tag">One thing the write phase deliberately refuses to do</span>
+      <p style="margin:8px 0 0">It does not decide whether an idea is worth writing. That gate lives upstream, in the
+      asset engine, which classifies every idea as write it, build it, collect data first, or route it elsewhere. By
+      the time a bundle reaches the write phase, that decision has already been made and the phase simply trusts it.</p>
+    </div>
+
+    <p style="margin-top:24px">The whole thing in one line: <b>route the format, tag and cut the material, verify every
+    number, design the article, budget it, name every section, write every section in parallel, blend, wrap, de-slop,
+    link, scrub, assemble.</b></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Write phase &middot; architecture and prompt reference &middot; 17 steps, 33 prompts, 3 runners &middot;
+    research bundle in, publish-ready draft out.
+  </div>
+</footer>
+
+</body>
+</html>
