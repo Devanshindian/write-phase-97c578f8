@@ -31,6 +31,9 @@ pre.prompt{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line
 .pv .h b{color:var(--orange);}
 .pv .val{padding:14px 16px;font-size:12.5px;line-height:1.66;white-space:pre-wrap;max-height:440px;overflow:auto;color:var(--ink);}
 .pv .empty{padding:14px 16px;font-size:14px;color:var(--muted);font-family:-apple-system,sans-serif;}
+.idx{display:flex;gap:7px;flex-wrap:wrap;align-items:center;background:var(--cream);
+border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 22px;}
+.idx .k{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:100%;margin-bottom:4px;}
 .empty-tab{text-align:center;padding:70px 20px;color:var(--muted);}
 .empty-tab .em{font-size:40px;} .empty-tab h3{color:var(--ink);margin:14px 0 8px;font-size:20px;}
 .empty-tab p{max-width:520px;margin:0 auto 10px;font-size:15.5px;}
@@ -47,9 +50,10 @@ it gets.</p>
 </div></div></header>
 
 <div class="pane on" id="p-prompt"><div class="wrap">
-<div class="note"><b>How to read this.</b> This is the real file, unedited. The example values come from
-one real article, <b>The Real Cost of Recruitment in 2026: The Numbers Behind the 2022 Figure Everyone Still Quotes</b>. Every other section gets the same
-instructions with its own values.</div>
+<div class="note"><b>How to read this.</b> This is the real file, unedited. The orange blanks are
+filled in per section. Click any one to see what it is and the real value it gets, taken from
+<b>The Real Cost of Recruitment in 2026: The Numbers Behind the 2022 Figure Everyone Still Quotes</b>.</div>
+<div class="idx"><span class="k">Every blank, if you would rather not scroll</span><button class="ph" data-for="v-BRAND">{{BRAND}}</button><button class="ph" data-for="v-ABOUT">{{ABOUT}}</button><button class="ph" data-for="v-TITLE">{{TITLE}}</button><button class="ph" data-for="v-ANGLE">{{ANGLE}}</button><button class="ph" data-for="v-SPINE">{{SPINE}}</button><button class="ph" data-for="v-PERSONA">{{PERSONA}}</button><button class="ph" data-for="v-PLAN">{{PLAN}}</button><button class="ph" data-for="v-HEADING">{{HEADING}}</button><button class="ph" data-for="v-JOB">{{JOB}}</button><button class="ph" data-for="v-WORD_TARGET">{{WORD_TARGET}}</button><button class="ph" data-for="v-THIN">{{THIN}}</button><button class="ph" data-for="v-ITEM_CONTRACT">{{ITEM_CONTRACT}}</button><button class="ph" data-for="v-TABLE">{{TABLE}}</button><button class="ph" data-for="v-LIST">{{LIST}}</button><button class="ph" data-for="v-SHAPE">{{SHAPE}}</button><button class="ph" data-for="v-PRODUCT_RULE">{{PRODUCT_RULE}}</button><button class="ph" data-for="v-BRIEF">{{BRIEF}}</button><button class="ph" data-for="v-FIELD">{{FIELD}}</button></div>
 <pre class="prompt">You are writing ONE section of an article published by <button class="ph" data-for="v-BRAND">{{BRAND}}</button>. Write as a neutral, credible expert: a
 <div class="pv" id="v-BRAND"><div class="h"><b>{{BRAND}}</b> &nbsp;Who publishes the article.</div><div class="val">Testlify</div></div>
 trusted industry writer, not a salesperson.
