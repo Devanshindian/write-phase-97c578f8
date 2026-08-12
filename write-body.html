@@ -34,6 +34,10 @@ pre.prompt{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line
 .idx{display:flex;gap:7px;flex-wrap:wrap;align-items:center;background:var(--cream);
 border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 22px;}
 .idx .k{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:100%;margin-bottom:4px;}
+.exh{margin:34px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+.exh .n{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);}
+.exh h3{margin:5px 0 0;font-size:19px;line-height:1.3;letter-spacing:-.01em;}
+.exh .m{margin:7px 0 0;font-size:14px;color:var(--muted);}
 .empty-tab{text-align:center;padding:70px 20px;color:var(--muted);}
 .empty-tab .em{font-size:40px;} .empty-tab h3{color:var(--ink);margin:14px 0 8px;font-size:20px;}
 .empty-tab p{max-width:520px;margin:0 auto 10px;font-size:15.5px;}
@@ -47,6 +51,7 @@ it gets.</p>
 <div class="tabs">
 <button class="tab on" data-pane="p-prompt">The prompt</button>
 <button class="tab" data-pane="p-out">The output</button>
+<button class="tab" data-pane="p-field">Voices from the field</button>
 </div></div></header>
 
 <div class="pane on" id="p-prompt"><div class="wrap">
@@ -67,7 +72,7 @@ THE ARTICLE
 - Distinct angle (what this article is built to deliver): <button class="ph" data-for="v-ANGLE">{{ANGLE}}</button>
 <div class="pv" id="v-ANGLE"><div class="h"><b>{{ANGLE}}</b> &nbsp;What makes this article different from every other one on the topic.</div><div class="val">Refreshes the 2022 SHRM cost-per-hire stat with the current public figure and breaks hard vs. soft costs down by role and hiring volume — the current data and structured breakdown this page lacks.</div></div>
 - What the whole piece argues (the spine): <button class="ph" data-for="v-SPINE">{{SPINE}}</button>
-<div class="pv" id="v-SPINE"><div class="h"><b>{{SPINE}}</b> &nbsp;The single argument the whole article makes.</div><div class="val">The cost-per-hire figure most HR budgets are built on is an edition-blind citation: the &quot;$4,700 SHRM number&quot; is a stack of superseded reports (a 2016-published FY2015 figure, a 2022 cycle SHRM itself calls superseded, and 2025/2026 releases that switch between averages and medians), and while non-executive cost has stayed roughly flat, median executive cost has gone from $8,800 to $15,000. Underneath that headline sits a second problem: the SHRM/ANSI formula stops at the accepted offer, so it captures only the 30-40% of real spend that gets invoiced and misses the 60% that is recruiter and hiring-manager time, interview load, application volume, and ramp. This article is for the CHRO or CXO building or defending a hiring budget. By the end they should be able to cite a current figure with its edition, method and sample attached, rebuild their own hard-versus-soft breakdown line by line, and defend a number segmented by role band, industry and hiring volume instead of a blended average that describes nobody.</div></div>
+<div class="pv" id="v-SPINE"><div class="h"><b>{{SPINE}}</b> &nbsp;The single argument the whole article makes.</div><div class="val">One argument, for a CHRO or CXO who has to defend a hiring budget in a boardroom: the cost-per-hire figure almost everyone quotes is a retired SHRM snapshot cited without its edition, method or sample, and the current data says something more useful than a single blended average. Non-executive cost has barely moved while executive cost has nearly doubled, invoiced hard costs are only a third of the real bill, and the number swings from $1,500 to $250,000 depending on role band and on how many people you hire a year. By the end the reader can quote a current figure with its provenance attached, split their own spend into hard and soft, and report cost per hire segmented by role and volume so it survives challenge.</div></div>
 
 WHO YOU ARE WRITING FOR (think about them, but NEVER name or address them):
 <button class="ph" data-for="v-PERSONA">{{PERSONA}}</button>
@@ -81,30 +86,30 @@ The others are being written right now by other writers. You can see their brief
 never write &quot;as we saw above&quot;, and never quote prose that does not exist yet.
 
 <button class="ph" data-for="v-PLAN">{{PLAN}}</button>
-<div class="pv" id="v-PLAN"><div class="h"><b>{{PLAN}}</b> &nbsp;Every section&#x27;s heading and brief. All sections are written at the same time by separate calls, so this is how they avoid covering the same ground.</div><div class="val">1. SHRM Already Superseded the $4,700 Everyone Quotes
-   JOB: Open on the article&#x27;s core claim with the actual citation trail: name the figures in circulation, date each one to its real SHRM edition, and show that &quot;the 2022 number&quot; is a layered stack of superseded reports quoted as if current. Sets up everything that follows by establishing that the problem is the citation, not just the age.
-2. Executive Cost Per Hire Nearly Doubled. Non-Exec Didn&#x27;t.
-   JOB: Deliver the biggest single finding and resolve the obvious objection to section one: if the old figure was so wrong, why did nobody notice? Because non-executive cost genuinely stayed flat while executive cost nearly doubled. This is the finding that makes a stale blended citation dangerous rather than merely dated.
-3. Four SHRM Editions, and Why Two Can&#x27;t Be Compared
-   JOB: The provenance block the format allows, and this article needs it: the figures above come from four different SHRM editions, two of which report averages and two medians, with different samples and field dates. State for each headline figure which publication and year it comes from and what stops two of them being compared directly. This is not a description of research we conducted.
-4. What the SHRM Formula Counts, and Where It Stops
-   JOB: Define the metric precisely so the rest of the article can argue about what it excludes. Give the SHRM/ANSI formula, name the internal and external cost lines it counts, and land the load-bearing fact: the boundary stops at the accepted offer. That boundary is the hinge into the hard-versus-soft argument.
-5. Hard Costs Are Only 30-40% of a Hire&#x27;s Real Price
-   JOB: The article&#x27;s second headline finding and its analytical spine: invoiced hard costs are only 30-40% of total hiring spend, while time-based soft costs run to 60% or more. Frame hard versus soft as a visibility distinction, not an importance one, and explain why a standard cost-per-hire figure structurally understates the real number. Everything from here to the segment sections is the itemisation of these two halves.
-6. The Invoiced Half: Ads, Tests, ATS, Relocation
-   JOB: Price the invoiced half line by line so the reader can rebuild it against their own general ledger: job advertising, assessments and background checks, amortised recruiting software, relocation and signing bonuses, and how the mix shifts by role type. Depends on the hard/soft split just established; feeds the role-band segmentation later.
-7. Recruitment Fees: 15-25% of Salary, Up to 50% at C-Level
-   JOB: Price the single largest external line for professional and senior roles, and show how it scales with salary rather than with effort. Then explain the three fee structures a CHRO will see on a contract so the percentage on the invoice is legible. This is the hard-cost item that dwarfs every other one in section six.
-8. In-House Beats Agencies at 15-20 Hires a Year
-   JOB: Answer the budget question the fee numbers immediately raise: is an in-house team cheaper? Give the volume break-even, the fixed-cost problem, and the speed trade-off, so the reader can tell whether their own mix is the source of overspend rather than the rates themselves.
-9. 17.6 Interviews Per Technical Hire, and What They Cost
-   JOB: Price the uninvoiced 60% with the hardest numbers available: interview counts and hours per hire, the application-volume surge inflating recruiter workload without headcount, and onboarding and ramp costs that sit beyond the formula&#x27;s boundary. This is the payoff of the hard-versus-soft split and the section that most changes the reader&#x27;s total.
-10. The Vacancy Cost the Formula Ignores: $500 a Day
-   JOB: Close the cost anatomy by naming what the formula excludes entirely (the cost of the seat staying empty) and the measurement errors that make a cost-per-hire number indefensible in a board meeting. This is the section that turns the article from a number into something the reader can stand behind under questioning.
-11. Cost Per Hire by Role: $1,500 Entry to $250,000 Exec
-   JOB: Deliver the segmentation the angle promises: replace the blended average with a table of cost per hire by role band, from entry-level to retained executive search, then explain what actually drives a threefold spread between two companies hiring the same title. Depends on the hard/soft breakdown; the reader should now be able to place their own roles on this table.
-12. Why 8 Hires Cost More Each Than 500 Hires Do
-   JOB: Close the segmentation with the volume axis: fixed recruiting spend divided by a variable number of hires is why a 40-person company pays more per hire than an enterprise spending far more in total, and name the one exception where cost per hire falls as volume rises. Ends the article on the practical implication for whoever is defending the budget.</div></div>
+<div class="pv" id="v-PLAN"><div class="h"><b>{{PLAN}}</b> &nbsp;Every section&#x27;s heading and brief. All sections are written at the same time by separate calls, so this is how they avoid covering the same ground.</div><div class="val">1. The $4,700 Figure Is Two SHRM Editions Out of Date
+   JOB: Settle what the widely quoted figure actually is: a stack of superseded SHRM editions, $4,129 from a 2016 report and ~$4,700 from the 2022 cycle, cited as if current. Establish the real fault, which is not that the old numbers were wrong but that they travel without their edition, averaging method or sample. This sets up everything that follows.
+2. Executive Cost Per Hire Hit $15,000, Non-Executive $1,300
+   JOB: Show what changed once SHRM refreshed the benchmark: median executive cost per hire climbed from $5,000 in 2017 to $8,800 in 2022 to $15,000 in 2026, while non-executive cost stayed close to flat. Explain why that flatness is exactly what let stale citations survive unchallenged, and name SHRM&#x27;s own reason for the executive jump.
+3. Which SHRM Numbers You Can&#x27;t Compare, and Why
+   JOB: Resolve the confusion the previous two sections create. Give each headline SHRM figure its publication, year, sample and whether it is an average or a median, and state plainly which pairs cannot be compared. This is the section that explains how a ~$4,700 non-executive figure and a $35,879 executive average can both be current and still not belong in the same sentence.
+4. How to Calculate Cost Per Hire (and Where It Stops)
+   JOB: Define the metric precisely so every figure later in the article has a denominator the reader can defend. Give the ANSI/SHRM formula, name what counts as internal and external cost, run one worked example end to end, and mark the boundary: the standard stops at the accepted offer, which is why onboarding and vacancy loss sit outside it and get priced separately later.
+5. Hard Costs vs Soft Costs: 30-40% Reaches an Invoice
+   JOB: Split the total bill into the two halves that matter for a budget defence: invoiced hard costs at roughly 30-40 percent, and time-based soft costs at 60 percent or more. Establish that this is a visibility distinction, not an importance one, and that a headline cost-per-hire figure built from invoices alone understates real exposure. This frames the next four sections.
+6. What Job Ads, Checks and Relocation Actually Cost
+   JOB: Price the invoiced side line by line so a reader can rebuild it from their own accounts payable: job board advertising, background checks and skills assessments, ATS and recruiting software amortised across hires, and relocation and signing bonuses. Agency fees are named here as the largest hard cost but priced in the section that follows.
+7. Agency Fees: 15-25% Mid-Level, 40-50% at C-Level
+   JOB: Price the single largest external line and settle when it is worth paying. Lay out contingency, retained and hybrid container structures and their fee bands, show what the same percentage produces at three real salary levels, and set an average referral bonus against a placement fee on the same hire so the comparison is in dollars, not principles.
+8. 17.6 Interviews for a Technical Hire, and What That Costs
+   JOB: Put a number on the largest soft cost. Interview load has risen to 11.7 interviews for a business role and 17.6 for a technical one, 12.2 against 23.3 hours of interviewer time, and application volume has roughly tripled while talent teams shrank. Convert both into unbilled salary cost, and name the two levers that reduce it: batching, and screening before calendar time is spent.
+9. Vacancy at $500 a Day, Plus a 90-Day Ramp
+   JOB: Price the two costs the ANSI/SHRM boundary deliberately excludes, paying off the boundary established earlier: the empty seat at roughly $500 a day against a median 2026 time to fill of 63.5 days, and the ramp period after the offer is signed. Close by stacking these onto the headline fee so the reader sees the full exposure in one figure.
+10. From $1,500 to $250,000: Cost Per Hire by Role Band
+   JOB: Replace the blended average with a segmented one. Give the 2026 cost-per-hire range by role band, from entry-level at $1,500-$3,500 to retained executive search at $50,000-$250,000, show the same spread inside a single company and across industries, then explain what produces it: skill scarcity, interview intensity, and how much turnover the role generates.
+11. Below 15 Hires a Year, an Agency Beats an In-House Team
+   JOB: Resolve the second axis, and the contradiction inside it. Cost per hire is fixed recruiting spend divided by hires, so the driver is annual hiring volume rather than company size: a lean 40-person employer can land at $1,875 a hire while a small employer carrying fixed tooling and using agencies lands well above average. Settle the build-or-buy question at the 15-to-20-hire break-even.
+12. Four Errors That Void Your Cost-Per-Hire Figure
+   JOB: Close by making the reader&#x27;s own figure defensible. Name the errors that void it: mismatched time periods, fractional hire counts, cross-company comparison, and quoting one blended average. Only one in five organisations tracks quality of hire alongside cost, which is what makes a low cost-per-hire figure easy to attack, so state the metrics that must be reported next to it.</div></div>
 
 YOU WRITE ONLY THE SECTION MARKED ABOVE. Do not cover another section&#x27;s ground. Write so your section
 picks up naturally from the one before and hands off cleanly to the one after.
@@ -112,11 +117,11 @@ picks up naturally from the one before and hands off cleanly to the one after.
 ════════════════════════════════════════════════════════════════════════
 YOUR SECTION
 Heading: <button class="ph" data-for="v-HEADING">{{HEADING}}</button>
-<div class="pv" id="v-HEADING"><div class="h"><b>{{HEADING}}</b> &nbsp;This section&#x27;s heading. Written earlier; the writer renders it exactly.</div><div class="val">SHRM Already Superseded the $4,700 Everyone Quotes</div></div>
+<div class="pv" id="v-HEADING"><div class="h"><b>{{HEADING}}</b> &nbsp;This section&#x27;s heading. Written earlier; the writer renders it exactly.</div><div class="val">The $4,700 Figure Is Two SHRM Editions Out of Date</div></div>
 Its job: <button class="ph" data-for="v-JOB">{{JOB}}</button>
-<div class="pv" id="v-JOB"><div class="h"><b>{{JOB}}</b> &nbsp;The only brief this section gets. What it must settle.</div><div class="val">Open on the article&#x27;s core claim with the actual citation trail: name the figures in circulation, date each one to its real SHRM edition, and show that &quot;the 2022 number&quot; is a layered stack of superseded reports quoted as if current. Sets up everything that follows by establishing that the problem is the citation, not just the age.</div></div>
+<div class="pv" id="v-JOB"><div class="h"><b>{{JOB}}</b> &nbsp;The only brief this section gets. What it must settle.</div><div class="val">Settle what the widely quoted figure actually is: a stack of superseded SHRM editions, $4,129 from a 2016 report and ~$4,700 from the 2022 cycle, cited as if current. Establish the real fault, which is not that the old numbers were wrong but that they travel without their edition, averaging method or sample. This sets up everything that follows.</div></div>
 Length:  about <button class="ph" data-for="v-WORD_TARGET">{{WORD_TARGET}}</button> words. Stay near it.
-<div class="pv" id="v-WORD_TARGET"><div class="h"><b>{{WORD_TARGET}}</b> &nbsp;How long this section should run.</div><div class="val">210</div></div>
+<div class="pv" id="v-WORD_TARGET"><div class="h"><b>{{WORD_TARGET}}</b> &nbsp;How long this section should run.</div><div class="val">245</div></div>
          You will usually be handed more facts than that length holds, and several cards often make
          the same point in slightly different words. Use the clearest one and move on. Choosing
          between them is part of writing the section.
@@ -148,9 +153,15 @@ Everything below this block is detail. If you get only these six right, the sect
    one exactly. Do not add one, do not merge two, do not drop one.
 
 6. EXPLAIN THE RARE TERM. ONLY THE RARE TERM.
+
+   THE TEST: would a smart twelfth grader follow this sentence on one read?
+   You write FOR the reader described above. You write AT twelfth grade. Those are two
+   different things. Their seniority earns them the subject, not the vocabulary. A term
+   they use every day at work still gets written plainly.
+
    A term earns a bracket only when ALL THREE are true:
      · it is vocabulary from inside one profession, not ordinary business English
-     · a smart reader outside that profession would genuinely not know it
+     · a smart twelfth grader outside that profession would genuinely not know it
      · getting it wrong changes what the sentence means
 
    YES: &quot;adverse impact (when a hiring step rejects one group at a much higher rate than another)&quot; ·
@@ -161,7 +172,7 @@ Everything below this block is detail. If you get only these six right, the sect
         headcount · ROI · attrition · shortlist. This is ordinary working vocabulary, and explaining
         it insults the reader.
 
-   OVER-EXPLAINING IS THE WORSE MISTAKE. Expect one bracket in a section. Often none.
+   OVER-EXPLAINING IS THE WORSE MISTAKE.
    If you cannot explain it in a short bracket, the sentence does not need the term.
 
 ════════════════════════════════════════════════════════════════════════
@@ -204,8 +215,7 @@ YOU HAVE ROOM TO MOVE, INSIDE YOUR OWN SECTION.
   [c13] Comparing across these editions is also not apples-to-apples, which is a second reason the old figure persists uncorrected:  — source: (no source)
   [c22] SHRM itself notes that respondents are not required to answer every metric, so the sample size underlying any single reported figure &quot;may vary&quot; within the same edition[2][1].  — source: (no source)
   [c23] None of this makes the older figures wrong at the time they were published — it means a number lifted out of context, without its edition, its averaging method, and its sample, is not a stable enough figure to anchor a 2026 hiring budget to.  — source: (no source)
-  [c499] Cost-per-hire adds up advertising, agency fees, recruiter time, and tooling, then divides by the number of hires. SHRM benchmarking puts the average near $4,700, though it swings widely by role and seniority. Do not chase the lowest possible number. A cheap hire who leaves in six months is the most expensive kind, because Gallup estimates replacing someone costs one-half to two times their salary.  — source: https://testlify.com/the-benefits-of-real-time-recruitment-metrics/
-  [c8038] 61.9% of HR and talent acquisition practitioners named SHRM as the community they rely on for TA peer insights, against 11.0% for local HR chapters, 8.5% for LinkedIn HR communities, 2.5% for Reddit / Quora / forums and 0.8% for Slack communities (n=118). [Q29]  — source: (no source)</div></div>
+  [c499] Cost-per-hire adds up advertising, agency fees, recruiter time, and tooling, then divides by the number of hires. SHRM benchmarking puts the average near $4,700, though it swings widely by role and seniority. Do not chase the lowest possible number. A cheap hire who leaves in six months is the most expensive kind, because Gallup estimates replacing someone costs one-half to two times their salary.  — source: https://testlify.com/the-benefits-of-real-time-recruitment-metrics/</div></div>
 
 ════════════════════════════════════════════════════════════════════════
 FACTS, AND WHAT YOU MAY WRITE WITHOUT ONE
@@ -522,45 +532,56 @@ the mood.
 
 # Voices from the field, The Real Cost of Recruitment in 2026: The Numbers Behind the 2022 Figure Everyone Still Quotes
 
-&gt; This file captures practitioner sentiment from online discussions about recruitment costs. It is not a source of facts; it never quotes or names individuals.
+&gt; This is what people who do this work say in public, gathered from open discussions. It is never a fact, it never carries a source tag, and it never quotes or names a person.
 
-**Coverage.** 5 discussion(s) read and 56 comments, from 2 on linkedin, 3 on reddit. 119 results were looked at across 1 search round(s).
+**Coverage.** 9 discussion(s) read and 82 comments, from 5 on linkedin, 4 on reddit. 167 results were looked at across 2 search round(s).
 
-## Agency fees of 20-25% are standard and rarely renegotiable.
-**What they say.** A 20–25% fee on base salary is considered fair and standard. Attempts to renegotiate after a candidate accepts are met with strong resistance; agencies view it as reneging on a contract and often refuse outright.
-**Strength.** Strong, the consensus appeared in a high-engagement Reddit thread with dozens of participants and was reinforced by a separate LinkedIn mention of the same percentage range.
-**Serves.** Section 7 (Recruitment Fees: 15–25% of Salary, Up to 50% at C‑Level).
-**What this changes.** The article should emphasise that fee negotiation must happen before a search begins, not at the offer stage, and that 20–25% is the current market range for professional roles.
+## Agency fee bands are treated as fixed, not negotiable
 
-## Fees cover recruiter commissions and heavy overhead.
-**What they say.** Agency recruiters work on commission, and firms carry costs like bad debt, marketing, insurance, admin, and taxes that are invisible to clients. The fee is not pure profit; it funds the entire recruitment engine and its risk.
-**Strength.** Moderate, these points surfaced in both a LinkedIn debate about agency economics and a Reddit thread on executive search pay, though as explanation rather than debate.
-**Serves.** Section 7 (Recruitment Fees).
-**What this changes.** The article can explain that the headline fee percentage exists because it must cover the recruiter’s cut plus the cost of running a sustainable search business, which helps justify why fees haven’t compressed.
+**What they say.** People on both sides of the table say the percentage is set before the work starts and does not move afterwards. Recruiters describe refusing a discount once a candidate has been accepted, and the buyers who ask for one are described as having failed to set expectations internally. The one softening people do accept is trading a lower rate for something in return: exclusivity, a block of roles, a shorter rebate window, or faster payment terms.
 
-## Excessive interview rounds are a hidden cost driver.
-**What they say.** Multiple interviews beyond three or four rounds are widely seen as a sign of internal dysfunction and wasted time. For a senior IC or executive, a process stretching to 12 rounds plus a case study is decried as disrespectful and cost‑inefficient.
-**Strength.** Strong, the complaint appears in two distinct discussions (a senior TA role and a $500K+ executive role), both with high engagement and visceral agreement.
-**Serves.** Section 9 (17.6 Interviews Per Technical Hire, and What They Cost).
-**What this changes.** The article should quantify the time cost of excessive rounds, not just report the round count, to show how this inflates the soft‑cost side of cost‑per‑hire.
+**Strength.** Strong. The same point appears in three separate discussions, from agency recruiters, in-house recruiters and buyers, so it is not one side defending its own margin.
 
-## Candidate drop‑off from long processes inflates cost.
-**What they say.** Candidates abandon dragging hiring processes, and ghosting after extensive investment erodes the pipeline. Each drop‑out means the hiring team’s time is wasted and the vacancy lingers, adding to the real cost of the hire.
-**Strength.** Moderate, drop‑off was noted as a side effect in both excessive‑interview threads, but was not the central complaint.
-**Serves.** Section 9 (Interview Costs) and Section 10 (Vacancy Cost).
-**What this changes.** The article should include candidate drop‑out rates as a multiplier that increases effective cost per hire, particularly when processes exceed three rounds.
+**Serves.** Section 7 (agency fees), and the angle&#x27;s claim that a cost figure has to be defensible.
 
-## Practitioners disagree on in‑house break‑even math.
-**What they say.** Some corporate recruiters believe filling three or four agency roles can replace a $160K salary. Experienced agency owners counter that business overhead, client acquisition, and bad debt eat into that revenue, making a simple break‑even calculation misleading.
-**Strength.** Moderate, the disagreement is sharp but contained in one highly‑commented LinkedIn post; it represents a genuine split between corporate and agency perspectives.
-**Serves.** Section 8 (In‑House Beats Agencies at 15–20 Hires a Year).
-**What this changes.** The article should present the in‑house‑vs‑agency break‑even as contested, not a clean threshold, and note the hidden costs of running an agency that published break‑even analyses often omit.
+**What this changes.** Present the fee bands as a price you either accept or trade against, not one you talk down. Where the section discusses reducing agency cost, the realistic levers are volume, exclusivity and rebate terms, not a lower percentage on a placed hire.
+
+## Recruitment budgets are argued in separate, unequal pots
+
+**What they say.** Several people describe a pattern where a large search fee clears without much friction while a smaller argument runs for weeks over the salary of the same hire. The explanation offered is that the two sit in different budget lines with different scrutiny, and one is easier to treat as a one-off professional fee than the other. Fee spend and payroll spend are simply not challenged with the same intensity.
+
+**Strength.** Moderate. It appears in two discussions with independent agreement from finance-side commenters as well as recruiters, though one of the two is a LinkedIn post where the author is making a public argument.
+
+**Serves.** The angle. This is the boardroom the reader is defending a number in.
+
+**What this changes.** Frame the hard-vs-soft split as also a political one. A figure that survives challenge has to name which pot each cost sits in, because the reader&#x27;s audience does not scrutinise all of them equally.
+
+## Application volume is up, and screening cost is the reason
+
+**What they say.** Employers describe an inbox they cannot read through, with a routine posting pulling hundreds of applications, many of them generated. The response people report is either more screening work per hire or a retreat to methods that cost calendar time, like in-person rounds and referral-first shortlists. Job seekers in the same threads describe sending far more applications than they used to for the same number of interviews, which is the other half of the same loop.
+
+**Strength.** Strong. It runs through three separate discussions, and the volume claim is made by employers and candidates independently rather than only by the side complaining.
+
+**Serves.** Section 8 (interview load and screening cost).
+
+**What this changes.** The volume rise is not an abstract statistic. Tie it to the section&#x27;s screening lever directly: the unbilled cost lands on whoever reads the pile, and the choice practitioners actually make is between reading more or paying calendar time in interviews.
+
+## Agencies are used for niche and urgent roles, not general ones
+
+**What they say.** In-house people describe going to agencies only for roles they cannot fill themselves, usually niche or urgent, and handling the rest internally because they get plenty of applicants. Agency-side people describe the same shift from the other end: mid-level headhunting drying up while executive search holds. Both attribute it to a market where a cheap posting produces more candidates than a team can process.
+
+**Strength.** Moderate. Two discussions, but with agreement from both in-house and agency commenters describing the same change from opposite sides.
+
+**Serves.** Section 11 (build or buy) and section 10 (role bands).
+
+**What this changes.** The build-or-buy break-even is not only about volume. Add the second axis practitioners actually use: agencies get the scarce and the urgent roles, which is also why agency-heavy spend concentrates at the top of the role band.
 
 ## What did not show up
-- No practitioner mentioned the SHRM $4,700 cost‑per‑hire figure, even when the search term “cost per hire outdated number” was present.
-- The concept of a daily vacancy cost (the price of an empty seat) was entirely absent from the discussions.
-- Practitioners did not use the hard‑versus‑soft cost framing, although they complained about hidden time costs in interviews.
-- No discussion touched on how cost per hire changes with hiring volume or economies of scale.</div></div>
+
+- **No one quotes a cost-per-hire benchmark.** Across every discussion, not one person cited $4,129, ~$4,700, or any published average. The stale-citation problem is real in published content, but practitioners here argue in fee percentages and dollar amounts on specific hires, not in benchmarks.
+- **No one describes calculating cost per hire.** No formula, no denominator, no mention of the ANSI standard or what counts as an internal cost. The metric is discussed as a thing that exists and travels well, never as something someone builds.
+- **Nothing on vacancy cost or ramp time as dollars.** Lost productivity and delayed initiatives are named as real costs, but always in general terms. Nobody priced an empty seat per day or costed a ramp period.
+- **Nothing on cost per hire segmented by volume.** People discuss whether to use an agency, but no one reports their own cost per hire at a given annual hiring volume, and no break-even hire count appeared anywhere.</div></div>
 ════════════════════════════════════════════════════════════════════════
 BEFORE YOU FINISH, CHECK THESE
 
@@ -585,8 +606,124 @@ drafts we have came from an older version. Showing them here would mean judging 
 work.</p>
 <p>The articles are being written again. This tab fills up when they are done.</p></div></div></div>
 
+<div class="pane" id="p-field"><div class="wrap">
+<div class="note"><b>What this is.</b> Before an article is written, we search Reddit, Teamblind and
+LinkedIn for people who actually do this work, read the threads, and cut what came back down to the
+few patterns this article can use. The writer gets the file below and is told to write it as what
+people say, never as fact: no numbers from it, no source tag, no quoting or naming anyone. It is what
+stops a section reading like an encyclopedia entry.<p>The third one is not a failure. That topic is not argued about in public, so the step said so and stopped. When that happens the whole block is removed from the writer's instructions, because one weak finding costs the writer more attention than an absent file does, and it invites leaning on something that was never solid.</p></div>
+<div class="exh"><div class="n">Example 1 &middot; 4 findings kept</div><h3>The Real Cost of Recruitment in 2026: The Numbers Behind the 2022 Figure Everyone Still Quotes</h3><p class="m">9 discussion(s) read and 82 comments, from 5 on linkedin, 4 on reddit. 167 results were looked at across 2 search round(s).</p></div><pre class="prompt"># Voices from the field, The Real Cost of Recruitment in 2026: The Numbers Behind the 2022 Figure Everyone Still Quotes
+
+&gt; This is what people who do this work say in public, gathered from open discussions. It is never a fact, it never carries a source tag, and it never quotes or names a person.
+
+**Coverage.** 9 discussion(s) read and 82 comments, from 5 on linkedin, 4 on reddit. 167 results were looked at across 2 search round(s).
+
+## Agency fee bands are treated as fixed, not negotiable
+
+**What they say.** People on both sides of the table say the percentage is set before the work starts and does not move afterwards. Recruiters describe refusing a discount once a candidate has been accepted, and the buyers who ask for one are described as having failed to set expectations internally. The one softening people do accept is trading a lower rate for something in return: exclusivity, a block of roles, a shorter rebate window, or faster payment terms.
+
+**Strength.** Strong. The same point appears in three separate discussions, from agency recruiters, in-house recruiters and buyers, so it is not one side defending its own margin.
+
+**Serves.** Section 7 (agency fees), and the angle&#x27;s claim that a cost figure has to be defensible.
+
+**What this changes.** Present the fee bands as a price you either accept or trade against, not one you talk down. Where the section discusses reducing agency cost, the realistic levers are volume, exclusivity and rebate terms, not a lower percentage on a placed hire.
+
+## Recruitment budgets are argued in separate, unequal pots
+
+**What they say.** Several people describe a pattern where a large search fee clears without much friction while a smaller argument runs for weeks over the salary of the same hire. The explanation offered is that the two sit in different budget lines with different scrutiny, and one is easier to treat as a one-off professional fee than the other. Fee spend and payroll spend are simply not challenged with the same intensity.
+
+**Strength.** Moderate. It appears in two discussions with independent agreement from finance-side commenters as well as recruiters, though one of the two is a LinkedIn post where the author is making a public argument.
+
+**Serves.** The angle. This is the boardroom the reader is defending a number in.
+
+**What this changes.** Frame the hard-vs-soft split as also a political one. A figure that survives challenge has to name which pot each cost sits in, because the reader&#x27;s audience does not scrutinise all of them equally.
+
+## Application volume is up, and screening cost is the reason
+
+**What they say.** Employers describe an inbox they cannot read through, with a routine posting pulling hundreds of applications, many of them generated. The response people report is either more screening work per hire or a retreat to methods that cost calendar time, like in-person rounds and referral-first shortlists. Job seekers in the same threads describe sending far more applications than they used to for the same number of interviews, which is the other half of the same loop.
+
+**Strength.** Strong. It runs through three separate discussions, and the volume claim is made by employers and candidates independently rather than only by the side complaining.
+
+**Serves.** Section 8 (interview load and screening cost).
+
+**What this changes.** The volume rise is not an abstract statistic. Tie it to the section&#x27;s screening lever directly: the unbilled cost lands on whoever reads the pile, and the choice practitioners actually make is between reading more or paying calendar time in interviews.
+
+## Agencies are used for niche and urgent roles, not general ones
+
+**What they say.** In-house people describe going to agencies only for roles they cannot fill themselves, usually niche or urgent, and handling the rest internally because they get plenty of applicants. Agency-side people describe the same shift from the other end: mid-level headhunting drying up while executive search holds. Both attribute it to a market where a cheap posting produces more candidates than a team can process.
+
+**Strength.** Moderate. Two discussions, but with agreement from both in-house and agency commenters describing the same change from opposite sides.
+
+**Serves.** Section 11 (build or buy) and section 10 (role bands).
+
+**What this changes.** The build-or-buy break-even is not only about volume. Add the second axis practitioners actually use: agencies get the scarce and the urgent roles, which is also why agency-heavy spend concentrates at the top of the role band.
+
+## What did not show up
+
+- **No one quotes a cost-per-hire benchmark.** Across every discussion, not one person cited $4,129, ~$4,700, or any published average. The stale-citation problem is real in published content, but practitioners here argue in fee percentages and dollar amounts on specific hires, not in benchmarks.
+- **No one describes calculating cost per hire.** No formula, no denominator, no mention of the ANSI standard or what counts as an internal cost. The metric is discussed as a thing that exists and travels well, never as something someone builds.
+- **Nothing on vacancy cost or ramp time as dollars.** Lost productivity and delayed initiatives are named as real costs, but always in general terms. Nobody priced an empty seat per day or costed a ramp period.
+- **Nothing on cost per hire segmented by volume.** People discuss whether to use an agency, but no one reports their own cost per hire at a given annual hiring volume, and no break-even hire count appeared anywhere.</pre><div class="exh"><div class="n">Example 2 &middot; 5 findings kept</div><h3>Running a Hiring Hackathon That Screens for Real Skill, With a Judging Rubric and an AI-Use Policy</h3><p class="m">12 discussion(s) read and 139 comments, from 1 on blind, 2 on linkedin, 9 on reddit. 145 results were looked at across 2 search round(s).</p></div><pre class="prompt"># Voices from the field, Running a Hiring Hackathon That Screens for Real Skill, With a Judging Rubric and an AI-Use Policy
+
+&gt; This is a read of what practitioners and candidates say in public discussion threads. None of it is a fact, none of it carries a source tag, and none of it may quote or name a person in the article.
+
+**Coverage.** 12 discussion(s) read and 139 comments, from 1 on blind, 2 on linkedin, 9 on reddit. 145 results were looked at across 2 search round(s).
+
+## Candidates read unpaid build tasks as free labour
+**What they say.** Across several threads, people describe multi-hour or multi-day build exercises as work the company extracts without paying, and some report their submitted work later showing up in the company&#x27;s actual product or marketing. The strongest objection is not the difficulty, it is the imbalance: the exercise costs the candidate hours and costs the employer nothing. A recurring demand is either payment for anything beyond a short task, or a hard cap on how many rounds a candidate is asked to sit.
+**Strength.** Strong. Four separate discussions, including one dominated by working designers and one by senior engineers, with high agreement in each. Two of those are venting communities, so the anger is amplified, but the specific complaint about scope and ownership repeats outside them.
+**Serves.** Section 1, and the angle. The article positions the hackathon as a work sample test worth its setup cost, so it has to name the cost the candidate carries.
+**What this changes.** Section 1 should state the time budget and the ownership rule as part of the format definition, not leave them unsaid. Say who owns the submitted work and that it will not be used in production.
+
+## Ambitious take-home briefs get quietly scored down
+**What they say.** One widely-read thread describes a take-home that stacked several distinct tasks into one exercise, and the response from experienced engineers was that the brief tested endurance rather than skill, so a rational candidate either skips it or does the minimum. In a separate thread on live exercises, people describe the opposite working well: one small, deliberately flawed artifact and a discussion about it. The consistent read is that scope creep in the brief destroys the comparison between candidates, because each one guesses differently about what actually counts.
+**Strength.** Moderate. Three discussions, spread across two platforms, and the agreement is about the diagnosis rather than the fix.
+**Serves.** Section 2 and section 3. What the score must settle drives what the brief may ask for.
+**What this changes.** Section 2 should add that the brief has to name which criteria are being scored, so candidates do not spend their budget on the parts the rubric ignores.
+
+## Practitioners split on whether rubrics beat judgment
+**What they say.** In the professional discussions, one side argues that &quot;we&#x27;ll know it when we see it&quot; and personality-based reads are just an excuse to skip the work of defining competencies, and that a structured rubric plus a mixed panel is what surfaces value a single reviewer would miss. The other side argues that any rubric becomes a target candidates optimise for, and that forcing a subjective decision into an objective structure loses the thing you were actually judging. A middle position appears more than once: score the evidence first and lock it, then discuss fit, so rapport cannot retroactively change how the same answer is valued.
+**Strength.** Strong. The split runs across three discussions, two on a professional network where people are stating public positions rather than venting, and one among senior engineers.
+**Serves.** The angle, and section 4. Published research does not show this split; it presents rubrics as settled good practice.
+**What this changes.** Section 3 or 4 should answer the gaming objection directly instead of ignoring it, and the lock-scores-before-discussion sequence is worth naming as an explicit rule.
+
+## Candidates see AI bans as one-sided and ignore them
+**What they say.** The most repeated position across the AI threads is that employers screen with AI while telling candidates not to use it, and that this asymmetry makes the ban feel like a status rule rather than a fairness rule. Several people say plainly that they note the instruction and disregard it, and others argue the ban is unenforceable anyway because competent use is undetectable. A quieter but recurring counter-position is that the interesting question is not whether AI was used but whether the candidate can critique what it produced, rather than accepting it whole.
+**Strength.** Strong. Five separate discussions across two platforms, with the same complaint appearing in recruiter-side communities as well as candidate-side ones.
+**Serves.** Section 7 and section 8. Section 7 rules out the blanket ban, and this is the evidence for why.
+**What this changes.** Section 7 should say the ban fails for a specific reason: candidates read it as hypocrisy and comply selectively, which means the ban produces an uneven field rather than a level one. Section 9 should state the employer&#x27;s own AI use in the same policy, since candidates are already weighing it.
+
+## Confidence in spotting AI use is widely disputed
+**What they say.** Interviewers in these threads report they can tell when someone is using AI, usually from stilted phrasing or answers that do not follow the question. Candidates and other practitioners push back hard on that claim, arguing that poor use is visible and competent use is not, so detection selects for clumsiness rather than for honesty. What both sides accept is that a follow-up conversation about specifics, the trade-offs, the problems hit, what was rejected, exposes the gap that reading the artifact does not.
+**Strength.** Moderate. Four discussions, with genuine disagreement on detection and genuine agreement on the follow-up conversation.
+**Serves.** Section 11. It names the live walkthrough as the step where an undisclosed submission comes apart.
+**What this changes.** Section 11 should not promise that judges can detect undisclosed AI from the submission itself. Put the whole weight on the walkthrough and on specific process questions.
+
+## What did not show up
+
+- **No one described running a hiring hackathon with a written rubric.** People discussed take-homes, live coding, and code-review exercises, but not the multi-candidate timed build event this article is about. The rubric mechanics in sections 3 to 6 have no field precedent in what was read.
+- **Nothing on inter-rater reliability, calibration sessions, or judge disagreement.** No one described double-scoring, comparing judges, or measuring agreement. Section 5 is unsupported by field discussion in either direction.
+- **Nothing on AI-use disclosure forms.** No one described asking candidates to declare what tool they used and for what, or scoring that declaration. The disclosure fields in sections 10 and 11 are new ground, not an existing practice being refined.
+- **Nothing on record-keeping or defending a score under challenge.** Candidates discussed suing over undisclosed AI screening, but no employer described retaining score rationale, tie-break rules, or a retention period. Section 6 has no field voice behind it.</pre><div class="exh"><div class="n">And when there is nothing to find</div><h3>Strategic Interview Questions Paired With Strong and Weak Sample Answers</h3><p class="m">0 discussion(s) read and 0 comments, from nowhere. 126 results were looked at across 1 search round(s).</p></div><pre class="prompt"># Voices from the field, Strategic Interview Questions Paired With Strong and Weak Sample Answers
+
+&gt; This file collects what hiring managers and interviewers say when they talk about the article’s subject.
+&gt; It is never a fact, never carries a source tag, and never quotes or names a person.
+
+**Coverage.** 0 discussion(s) read and 0 comments, from nowhere. 126 results were looked at across 1 search round(s).
+
+This is not a subject practitioners argue about in public. Interview question design paired with sample strong and weak answers lives almost entirely inside HR and recruiting content streams. Frontline hiring managers, the article’s intended audience, rarely discuss question construction or scoring mechanics in the open communities searched. No practitioner debates, repeated gripes, or genuine splits surfaced from the scan.
+
+## What did not show up
+
+- Practitioner critiques of strong/weak answer pairs outside HR-vendor blogs.
+- Disagreements among hiring managers about what makes a scoring rubric usable in a live interview.
+- Real-world stories of managers scoring answers on the spot using a written 1–5 scale and quoting candidate language.
+- Arguments about whether providing verbatim sample answers encourages template-matching or hurts authenticity.
+- Complaints about “tell me about yourself” being turned into a scored trap, rather than a warm opening, from the interviewer side.</pre>
+</div></div>
+
 <footer><div class="wrap">The writing step &middot; one call per section &middot;
-2,610 words of instructions, plus that section's own facts.</div></footer>
+2,654 words of instructions, plus that section's own facts.</div></footer>
 <script>
 document.querySelectorAll('.tab').forEach(function(t){
   t.onclick=function(){
